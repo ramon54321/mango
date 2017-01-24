@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<p><%= session.getId() %></p>
+
 <c:choose>
 <c:when test="${param.username == null}">
 
@@ -20,8 +22,22 @@
 
 	<jsp:useBean id="users" class="main.Users"/>
 	<%
-		users.signInUser();
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+
+		boolean validUser = users.validateCredentials(username, password);
+
+		if(validUser){
+			System.out.println("Sign in valid. User will be given session.");
+			session.setAttribute("username",username);
+			response.sendRedirect(request.getContextPath() + "/pages/wall.jsp");
+		} else {
+			session.invalidate();
+			response.sendRedirect(request.getContextPath() + "/users/signin.jsp");
+		}
 	%>
+
+	<%= validUser %>
 
 </c:otherwise>
 </c:choose>

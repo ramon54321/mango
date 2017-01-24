@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class Users {
 	
-	public void signInUser() {
+	public boolean validateCredentials(String username, String password) {
 
 		System.out.println("Signing in user.");
 
@@ -41,6 +41,11 @@ public class Users {
 			
 		} catch (Exception e) {e.printStackTrace();}
 		*/
+		if(username.equals("yes")){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
