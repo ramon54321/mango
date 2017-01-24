@@ -6,5 +6,5 @@ sourceSets {
 }
 
 dependencies {
-	compile fileTree(include: ['*.jar'], dir: '/home/ramon/glassfish4/glassfish/lib')
+	compile fileTree(include: ['*.jar'], dir: '../lib')
 }
