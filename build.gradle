@@ -1,0 +1,10 @@
+apply plugin: "java"
+
+sourceSets {
+	main.java.srcDir "src"
+	main.output.classesDir "WEB-INF/classes"
+}
+
+dependencies {
+	compile fileTree(include: ['*.jar'], dir: '/home/ramon/glassfish4/glassfish/lib')
+}
