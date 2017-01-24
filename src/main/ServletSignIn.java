@@ -8,20 +8,31 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import java.sql.*;
 
-public class MyClass extends HttpServlet{
+public class ServletSignIn extends HttpServlet{
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
-		// Session - Not needed for DB, just for reference
 		HttpSession session = request.getSession();
 
 		response.setContentType("text/html");
 
-		System.out.println("Page loaded!");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
 
-		PrintWriter writer = response.getWriter();
-		writer.println("<p>Database query 3.</p>");
+		boolean validUser = validateCredentials(username, password);
 
+		if(validUser){
+			System.out.println("Sign in valid. User will be given session.");
+			session.setAttribute("username",username);
+			response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
+		} else {
+			session.invalidate();
+			response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+		}
+	}
+
+	private boolean validateCredentials(String username, String password) {
+/*
 		String driver = "com.mysql.jdbc.Driver";
 		String db_url = "jdbc:mysql://92.222.90.41:3306/mango";
 
@@ -48,6 +59,16 @@ public class MyClass extends HttpServlet{
 			conn.close();
 			
 		} catch (Exception e) {e.printStackTrace();}
+		*/
+		if(username.equals("admin")){
+			if(password.equals("admin")){
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }
