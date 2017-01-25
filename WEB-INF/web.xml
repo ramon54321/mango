@@ -3,9 +3,22 @@
 		<servlet-name>signin</servlet-name>
 		<servlet-class>main.ServletSignIn</servlet-class>
 	</servlet>
+	<servlet>
+	    <servlet-name>Jersey REST Service</servlet-name>
+	    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+	    <init-param>
+	        <param-name>jersey.config.server.provider.packages</param-name>
+	        <param-value>main.resources</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>signin</servlet-name>
 		<url-pattern>/serv/signin</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+	    <servlet-name>Jersey REST Service</servlet-name>
+	    <url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	<filter>
 	   <filter-name>authfilter</filter-name>
