@@ -14,8 +14,8 @@ Glassfish Server Application
   
 - Add Jar libraries to Glassfish.
    - Building will not work if the required Jars are not in the glassfish4/glassfish/lib folder.
-   - Download mysql-connector-java-5.1.40-bin.jar and move it to the folder.
-   - Download jersey-bundle-1.19.1.jar and move it to the folder.
+   - Copy from local repo lib folder: mysql-connector-java-5.1.40-bin.jar and move it to the lib folder glassfish/lib.
+   - Copy from local repo lib folder: jersey-bundle-1.19.1.jar and move it to the lib folder glassfish/lib.
   
 - Add app to Glassfish.
    - Go to the glassfish admin panel, and click on applications, then click Deploy, and add the folder which contains the repo.
