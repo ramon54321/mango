@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import java.sql.*;
+import main.dto.*;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.Session;
 
 public class ServletSignIn extends HttpServlet{
 	
@@ -60,6 +64,27 @@ public class ServletSignIn extends HttpServlet{
 			
 		} catch (Exception e) {e.printStackTrace();}
 		*/
+
+
+		if(username.equals("hibernate")){
+
+			System.out.println("Testing Hibernate");
+
+			DataObject_User myUser = new DataObject_User();
+			myUser.setUsername("Jeremy1");
+			myUser.setUserId(1);
+
+			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(myUser);
+			session.getTransaction().commit();
+
+		}
+
+
+
+
 		if(username.equals("admin")){
 			if(password.equals("admin")){
 				return true;
