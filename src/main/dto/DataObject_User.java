@@ -1,14 +1,15 @@
 package main.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class DataObject_User {
 
 	@Id
+	@GeneratedValue
 	private int userId;
 	private String username;
+	//private String 
 
 	public void setUserId(int userId){
 		this.userId = userId;

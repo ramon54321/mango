@@ -11,6 +11,7 @@ import main.dto.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
+import java.security.MessageDigest;
 
 public class ServletSignIn extends HttpServlet{
 	
@@ -32,6 +33,28 @@ public class ServletSignIn extends HttpServlet{
 		} else {
 			session.invalidate();
 			response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+		}
+	}
+
+	private String getHash(String pure){
+		try {
+			System.out.println("Testing Encrypt");
+
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(pure.getBytes());
+			byte byteData[] = md.digest();
+
+			StringBuffer pureHash = new StringBuffer();
+			for (int i = 0; i < byteData.length; i++) {
+				pureHash.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+			}
+
+			String hash = pureHash.toString();
+			return hash;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
 		}
 	}
 
@@ -64,6 +87,20 @@ public class ServletSignIn extends HttpServlet{
 			
 		} catch (Exception e) {e.printStackTrace();}
 		*/
+
+
+		if(username.equals("encrypt")){
+
+			String inTheDB = "6795a84f1fa5b8ecdd5b8172f6657447";
+
+			String enteredHash = getHash(password);
+			System.out.println(enteredHash);
+
+			if(inTheDB.equals(enteredHash)){
+				System.out.println("PASSED!!!");
+			}
+
+		}
 
 
 		if(username.equals("hibernate")){
