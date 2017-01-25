@@ -4,13 +4,13 @@ Mango collaboration application.
 Glassfish Server Application
 
 - Install Glassfish server.
-   - Download and extract to folder.
+   - Download and extract to a folder. Preferably in ~home
    - CD to install folder (glassfish4) and execute $ ./glassfish/bin/asadmin start-domain domain1
-   - This will start the websever on the localhost.
+   - This will start the websever on localhost:8080
    - Access the admin panel by going to localhost:4848
   
 - Download the repo.
-   - Clone this repo into a new folder (THE FOLDER MUST BE IN THE glassfish4/glassfish/ directory). EG. glassfish4/glassfish/myapp/
+   - Clone this repo into a new folder **(THE FOLDER MUST BE IN THE glassfish4/glassfish/ directory)**. EG. glassfish4/glassfish/myapp/
   
 - Add Jar libraries to Glassfish.
    - Building will not work if the required Jars are not in the glassfish4/glassfish/lib folder.
@@ -30,7 +30,8 @@ Glassfish Server Application
 - Building.
    - CD to the app folder.
    - run $ gradle classes
-      - DO NOT RUN JUST gradle !!! This will cause a mess of files!
+      - **DO NOT RUN JUST $ gradle**
+          - This will cause a mess of files!
   
 - Running.
    - Whenever a change is made to the java classes, building will not be enough to see changes.
