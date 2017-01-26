@@ -4,6 +4,10 @@
 		<servlet-class>main.ServletSignIn</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>signup</servlet-name>
+		<servlet-class>main.ServletSignUp</servlet-class>
+	</servlet>
+	<servlet>
 	    <servlet-name>Jersey REST Service</servlet-name>
 	    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 	    <init-param>
@@ -15,6 +19,10 @@
 	<servlet-mapping>
 		<servlet-name>signin</servlet-name>
 		<url-pattern>/serv/signin</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>signup</servlet-name>
+		<url-pattern>/serv/signup</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 	    <servlet-name>Jersey REST Service</servlet-name>
