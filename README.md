@@ -10,6 +10,9 @@ Glassfish Server Application
   
 - Download the repo.
    - Clone this repo into a new folder **(THE FOLDER MUST BE IN THE glassfish4/glassfish/ directory)**. EG. `glassfish4/glassfish/myapp/`
+   
+- Manually add lib.
+   - Due to a bug in Glassfish, it is required to replace a lib file. **Copy the `org.eclipse.persistence.moxy.jar` from the lib folder of the repository into the `glassfish4/glassfish/modules/` folder and replace the original file.**
   
 - Add app to Glassfish.
    - Go to the glassfish admin panel, and click on applications, then click Deploy, and add the folder which contains the repo.
