@@ -18,25 +18,58 @@ public class Resources {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("users/{username}")
-	public DataObject_User user(@PathParam("username") String username){
+	@Path("users/username/{username}")
+	public DataObject_User user_username(@PathParam("username") String username){
 
-		// Open session and get user from database given username
-		Session session = Hibernate.getSessionFactory().openSession();
-		session.beginTransaction();
-		
-		String hql = "FROM DataObject_User WHERE username = :username";
-		Query query = session.createQuery(hql);
-		query.setParameter("username", username);
-		List results = query.list();
-		
-		System.out.println("List length: " + results.size());
-		session.getTransaction().commit();
-		session.close();
+		try {
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			
+			String hql = "FROM DataObject_User WHERE username = :username";
+			Query query = session.createQuery(hql);
+			query.setParameter("username", username);
+			List results = query.list();
+			
+			System.out.println("List length: " + results.size());
+			session.getTransaction().commit();
+			session.close();
 
-		DataObject_User retrievedUser = (DataObject_User) results.get(0);
+			DataObject_User retrievedUser = (DataObject_User) results.get(0);
 
-		return retrievedUser;
+			return retrievedUser;
+
+		} catch (Exception e){
+			return null;
+		}
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("users/userid/{id}")
+	public DataObject_User user_userid(@PathParam("id") String idin){
+
+		try {
+			int id = Integer.valueOf(String.valueOf(idin));
+
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			
+			String hql = "FROM DataObject_User WHERE userId = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List results = query.list();
+			
+			System.out.println("List length: " + results.size());
+			session.getTransaction().commit();
+			session.close();
+
+			DataObject_User retrievedUser = (DataObject_User) results.get(0);
+
+			return retrievedUser;
+
+		} catch (Exception e){
+			return null;
+		}
 	}
 
 	@GET
@@ -44,19 +77,49 @@ public class Resources {
 	@Path("users")
 	public Response users(){
 
-		// Open session and get user from database given username
-		Session session = Hibernate.getSessionFactory().openSession();
-		session.beginTransaction();
-		
-		String hql = "FROM DataObject_User";
-		Query query = session.createQuery(hql);
-		List<DataObject_User> results = (List<DataObject_User>) query.list();
-		GenericEntity<List<DataObject_User>> list = new GenericEntity<List<DataObject_User>>(results){};
+		try {
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			
+			String hql = "FROM DataObject_User";
+			Query query = session.createQuery(hql);
+			List<DataObject_User> results = (List<DataObject_User>) query.list();
+			GenericEntity<List<DataObject_User>> list = new GenericEntity<List<DataObject_User>>(results){};
 
-		session.getTransaction().commit();
-		session.close();
+			session.getTransaction().commit();
+			session.close();
 
-		return Response.ok(list).build();
+			return Response.ok(list).build();
+
+		} catch (Exception e){
+			return null;
+		}
+	}
+
+	// Notes -----------------------------------
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("notes")
+	public Response notes(){
+
+		try {
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			
+			String hql = "FROM DataObject_Note";
+			Query query = session.createQuery(hql);
+			List<DataObject_Note> results = (List<DataObject_Note>) query.list();
+			GenericEntity<List<DataObject_Note>> list = new GenericEntity<List<DataObject_Note>>(results){};
+
+			session.getTransaction().commit();
+			session.close();
+
+			return Response.ok(list).build();
+
+		} catch (Exception e){
+			return null;
+		}
 	}
 
 }
