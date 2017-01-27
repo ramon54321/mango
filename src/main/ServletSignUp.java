@@ -29,10 +29,14 @@ public class ServletSignUp extends HttpServlet{
 		String lastname = request.getParameter("lastname");
 		String accesscode = request.getParameter("accesscode");
 
+		// Checks
 		if(!password.equals(password2))
 			return;
 
 		if(password.length() < 5)
+			return;
+
+		if(username.length() < 5)
 			return;
 
 		// Access Code

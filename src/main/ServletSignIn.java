@@ -18,6 +18,8 @@ import org.hibernate.Query;
 import main.utilities.*;
 
 public class ServletSignIn extends HttpServlet{
+
+	private DataObject_User userToLogIn = null;
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
@@ -32,7 +34,12 @@ public class ServletSignIn extends HttpServlet{
 
 		if(validUser){
 			System.out.println("Sign in valid. User will be given session.");
-			session.setAttribute("username",username);
+			session.setAttribute("userid", userToLogIn.getUserId());
+			session.setAttribute("username", userToLogIn.getUsername());
+			session.setAttribute("firstname", userToLogIn.getFirstname());
+			session.setAttribute("lastname", userToLogIn.getLastname());
+			session.setAttribute("email", userToLogIn.getEmail());
+			session.setAttribute("level", userToLogIn.getLevel());
 			response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
 		} else {
 			session.invalidate();
@@ -78,6 +85,7 @@ public class ServletSignIn extends HttpServlet{
 
 		// Compare passwords
 		if(givenPassword.equals(expectedPassword)){
+			userToLogIn = retrievedUser;
 			return true;
 		} else {
 			return false;

@@ -30,5 +30,6 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<mapping class="main.dto.DataObject_User"/>
+		<mapping class="main.dto.DataObject_Note"/>
 	</session-factory>
 </hibernate-configuration>
