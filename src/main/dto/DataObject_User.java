@@ -2,7 +2,9 @@ package main.dto;
 
 import javax.persistence.*;
 import main.dto.connections.*;
+import javax.xml.bind.annotation.*;
 
+@XmlRootElement
 @Entity
 public class DataObject_User {
 
@@ -31,6 +33,7 @@ public class DataObject_User {
 		this.userId = userId;
 	}
 
+	@XmlElement
 	public int getUserId(){
 		return this.userId;
 	}
@@ -39,6 +42,7 @@ public class DataObject_User {
 		this.username = username;
 	}
 
+	@XmlElement
 	public String getUsername(){
 		return this.username;
 	}
@@ -47,6 +51,7 @@ public class DataObject_User {
 		this.password = password;
 	}
 
+	@XmlElement
 	public String getPassword(){
 		return this.password;
 	}
@@ -55,6 +60,7 @@ public class DataObject_User {
 		this.level = level;
 	}
 
+	@XmlElement
 	public int getLevel(){
 		return this.level;
 	}
@@ -63,6 +69,7 @@ public class DataObject_User {
 		this.email = email;
 	}
 
+	@XmlElement
 	public String getEmail(){
 		return this.email;
 	}
@@ -71,6 +78,7 @@ public class DataObject_User {
 		this.firstname = firstname;
 	}
 
+	@XmlElement
 	public String getFirstname(){
 		return this.firstname;
 	}
@@ -79,6 +87,7 @@ public class DataObject_User {
 		this.lastname = lastname;
 	}
 
+	@XmlElement
 	public String getLastname(){
 		return this.lastname;
 	}

@@ -34,7 +34,7 @@ public class ServletAddNote extends HttpServlet{
 		if(note.length() < 5)
 			return;
 
-		if(username.length < 5)
+		if(username.length() < 5)
 			return;
 
 		DataObject_Note newNote = new DataObject_Note(username, title, note);
