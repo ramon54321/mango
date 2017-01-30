@@ -9,7 +9,7 @@ Glassfish Server Application
    - Access the admin panel by going to `localhost:4848`
   
 - Download the repo.
-   - Clone this repo into a new folder **(THE FOLDER MUST BE IN THE glassfish4/glassfish/ directory)**. EG. `glassfish4/glassfish/myapp/`
+   - Clone this repo into a new folder (The folder must be in: glassfish4/glassfish/). EG. `glassfish4/glassfish/myapp/`
    
 - Manually add lib.
    - Due to a bug in Glassfish, it is required to replace a lib file. **Copy the `org.eclipse.persistence.moxy.jar` from the lib folder of the repository into the `glassfish4/glassfish/modules/` folder and replace the original file.**
@@ -27,8 +27,7 @@ Glassfish Server Application
 - Building.
    - CD to the app folder.
    - run `$ gradle classes`
-      - **DO NOT RUN JUST `$ gradle`**
-          - This will cause a mess of files!
+      - **Do not run: `$ gradle` alone, it will create a directory structure that is not needed.**
   
 - Running.
    - Whenever a change is made to the java classes, building will not be enough to see changes.
@@ -39,6 +38,7 @@ ___
 # Mango - Application Guide
 
 Overview flowchart: https://drive.google.com/file/d/0B1qxfIcmRWOsV1JleHlyb0dBQm8/view
+
 Development trello: https://trello.com/b/YAlDCXr3/master-development
 
 The flowchart is always kept up to date with progress and is considered to be the live view of how the application functions.
@@ -62,7 +62,10 @@ The flowchart is always kept up to date with progress and is considered to be th
       
 - RESTful API.
    - The following is a list of urls which are accessable.
-     - TODO
+     - users/
+     - users/username/{username}
+     - users/userid/{userid}
+     - notes/
      
 - Directory Structure.
    - pages/
@@ -76,4 +79,4 @@ The flowchart is always kept up to date with progress and is considered to be th
       - signup
       - addnote
    - rest/
-      - TODO
+      - See above.
