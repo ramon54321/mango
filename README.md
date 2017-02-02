@@ -20,7 +20,7 @@ Glassfish Server Application
      - Example context root of : `myapplication`
      - Result of the index file will be : `localhost:8080/myapplication/index.jsp`
     
-- Source Editing.
+- Source editing.
    - Any java source files should be added to the src folder. Any other pages will be available at the URL at their respective directory.
    - Java files are in a directory structure that represents their package.
 
