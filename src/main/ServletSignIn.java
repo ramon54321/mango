@@ -20,9 +20,9 @@ import main.utilities.*;
 public class ServletSignIn extends HttpServlet{
 
 	private DataObject_User userToLogIn = null;
-	
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		
+
 		HttpSession session = request.getSession();
 
 		String username = request.getParameter("username");
@@ -52,7 +52,7 @@ public class ServletSignIn extends HttpServlet{
 		if(username.equals("exec")){
 
 			//Hibernate.addUser(new DataObject_User("andrew", "goodwill", 0, "andrew@mail.com"));
-			
+
 			//WebLog.log("This should be a line.");
 			WebLog.truncate();
 
@@ -62,12 +62,12 @@ public class ServletSignIn extends HttpServlet{
 		// Open session and get user from database given username
 		Session session = Hibernate.getSessionFactory().openSession();
 		session.beginTransaction();
-		
+
 		String hql = "FROM DataObject_User WHERE username = :username";
 		Query query = session.createQuery(hql);
 		query.setParameter("username", username);
 		List results = query.list();
-		
+
 		System.out.println("List length: " + results.size());
 		session.getTransaction().commit();
 		session.close();
@@ -78,7 +78,7 @@ public class ServletSignIn extends HttpServlet{
 
 		DataObject_User retrievedUser = (DataObject_User) results.get(0);
 		String expectedPassword = retrievedUser.getPassword();
-		String givenPassword = Hibernate.getHash(password);
+		String givenPassword = DataServices.getHash(password);
 
 		System.out.println("Given: " + givenPassword);
 		System.out.println("Expected: " + expectedPassword);

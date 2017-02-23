@@ -24,12 +24,12 @@ public class Resources {
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			
+
 			String hql = "FROM DataObject_User WHERE username = :username";
 			Query query = session.createQuery(hql);
 			query.setParameter("username", username);
 			List results = query.list();
-			
+
 			System.out.println("List length: " + results.size());
 			session.getTransaction().commit();
 			session.close();
@@ -53,12 +53,12 @@ public class Resources {
 
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			
+
 			String hql = "FROM DataObject_User WHERE userId = :id";
 			Query query = session.createQuery(hql);
 			query.setParameter("id", id);
 			List results = query.list();
-			
+
 			System.out.println("List length: " + results.size());
 			session.getTransaction().commit();
 			session.close();
@@ -80,7 +80,7 @@ public class Resources {
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			
+
 			String hql = "FROM DataObject_User";
 			Query query = session.createQuery(hql);
 			List<DataObject_User> results = (List<DataObject_User>) query.list();
@@ -96,6 +96,35 @@ public class Resources {
 		}
 	}
 
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("users/signin")
+	public String userSignIn(@HeaderParam("username") String username, @HeaderParam("password") String password){
+
+		boolean validUser = DataServices.validateCredentials(username, password);
+
+		return String.valueOf(validUser);
+
+/*
+		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + validUser + " - IP: " + request.getRemoteAddr());
+
+		if(validUser){
+			System.out.println("Sign in valid. User will be given session.");
+			session.setAttribute("userid", userToLogIn.getUserId());
+			session.setAttribute("username", userToLogIn.getUsername());
+			session.setAttribute("firstname", userToLogIn.getFirstname());
+			session.setAttribute("lastname", userToLogIn.getLastname());
+			session.setAttribute("email", userToLogIn.getEmail());
+			session.setAttribute("level", userToLogIn.getLevel());
+			response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
+		} else {
+			session.invalidate();
+			response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+		}
+		*/
+
+	}
+
 	// Notes -----------------------------------
 
 	@GET
@@ -106,7 +135,7 @@ public class Resources {
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			
+
 			String hql = "FROM DataObject_Note";
 			Query query = session.createQuery(hql);
 			List<DataObject_Note> results = (List<DataObject_Note>) query.list();
