@@ -103,7 +103,7 @@ public class Resources {
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("users/signin")
-	public String userSignIn(@HeaderParam("username") String username, @HeaderParam("password") String password, @Context HttpServletRequest request, @Context HttpServletResponse response){
+	public String userSignIn(@FormParam("username") String username, @FormParam("password") String password, @Context HttpServletRequest request, @Context HttpServletResponse response){
 
 		UserSessionPOD user = DataServices.validateCredentials(username, password);
 
@@ -111,7 +111,7 @@ public class Resources {
 
 		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + user.successfulLogin + " - IP: " + request.getRemoteAddr());
 
-		try{
+		try {
 			if(user.successfulLogin){
 				System.out.println("Sign in valid. User will be given session.");
 				session.setAttribute("userid", user.user.getUserId());
@@ -120,16 +120,49 @@ public class Resources {
 				session.setAttribute("lastname", user.user.getLastname());
 				session.setAttribute("email", user.user.getEmail());
 				session.setAttribute("level", user.user.getLevel());
-				response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
+				return "success";
 			} else {
 				session.invalidate();
-				response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+				return "failed";
 			}
-		} catch (Exception e){
-			
-		}
+		} catch (Exception e){ e.printStackTrace(); return "failed"; }
+	}
 
-		return String.valueOf(user.successfulLogin);
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("users/signup")
+	public String signup(@FormParam("username") String username, @FormParam("password") String password,
+											@FormParam("email") String email, @FormParam("firstname") String firstname, @FormParam("lastname") String lastname,
+											@FormParam("accesscode") String accesscode, @Context HttpServletRequest request, @Context HttpServletResponse response){
+
+		// Checks
+		if(password.length() < 5)
+			return "password_to_short";
+
+		if(username.length() < 5)
+			return "username_to_short";
+
+		// Access Code
+		int level = 0;
+		if(accesscode.equals("manager"))
+			level = 1;
+		if(accesscode.equals("admin"))
+			level = 2;
+
+		DataObject_User newUser = new DataObject_User(username, password, level, email, firstname, lastname);
+
+		// Open session
+		try {
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			session.save(newUser);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) { e.printStackTrace(); return "failed"; }
+
+		WebLog.log("New user created with Username: " + username + " - IP: " + request.getRemoteAddr());
+
+		return "success";
 	}
 
 	// Notes -----------------------------------
@@ -156,6 +189,34 @@ public class Resources {
 		} catch (Exception e){
 			return null;
 		}
+	}
+
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("notes/addnote")
+	public String addNote(@FormParam("username") String username, @FormParam("title") String title, @FormParam("note") String note, @Context HttpServletRequest request, @Context HttpServletResponse response){
+
+		// Checks
+		if(title.length() < 5)
+			return "title_to_short";
+
+		if(note.length() < 5)
+			return "note_to_short";
+
+		DataObject_Note newNote = new DataObject_Note(username, title, note);
+
+		// Open session
+		try {
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+			session.save(newNote);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) { e.printStackTrace(); return "failed"; }
+
+		WebLog.log("New note created by Username: " + username + " - Titled: "  + title + " - IP: " + request.getRemoteAddr());
+
+		return "success";
 	}
 
 }

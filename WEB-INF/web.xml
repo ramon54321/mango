@@ -1,17 +1,5 @@
 <web-app>
 	<servlet>
-		<servlet-name>signin</servlet-name>
-		<servlet-class>main.ServletSignIn</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>signup</servlet-name>
-		<servlet-class>main.ServletSignUp</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>addnote</servlet-name>
-		<servlet-class>main.ServletAddNote</servlet-class>
-	</servlet>
-	<servlet>
 	    <servlet-name>Jersey REST Service</servlet-name>
 	    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 	    <init-param>
@@ -20,18 +8,6 @@
 	    </init-param>
 	    <load-on-startup>1</load-on-startup>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>signin</servlet-name>
-		<url-pattern>/serv/signin</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>signup</servlet-name>
-		<url-pattern>/serv/signup</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>addnote</servlet-name>
-		<url-pattern>/serv/addnote</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 	    <servlet-name>Jersey REST Service</servlet-name>
 	    <url-pattern>/rest/*</url-pattern>
@@ -43,5 +19,6 @@
 	<filter-mapping>
 	   <filter-name>authfilter</filter-name>
 	   <url-pattern>/pages/member/*</url-pattern>
+		 <url-pattern>/rest/member/*</url-pattern>
 	</filter-mapping>
 </web-app>
