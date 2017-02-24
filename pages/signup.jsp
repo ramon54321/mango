@@ -1,7 +1,7 @@
 <p>Session ID: <%= session.getId() %></p>
 
 <h2>Sign Up</h2>
-<form method="POST" action="/serv/signup">
+<form method="POST" action="/mango/serv/signup">
 	<p>Username:</p>
 	<input type="text" name="username">
 	<p>Password:</p>
