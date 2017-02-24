@@ -20,7 +20,7 @@ import main.utilities.*;
 
 public class DataServices {
 
-  public static boolean validateCredentials(String username, String password) {
+  public static UserSessionPOD validateCredentials(String username, String password) {
 
 		// Open session and get user from database given username
 		Session session = Hibernate.getSessionFactory().openSession();
@@ -37,7 +37,7 @@ public class DataServices {
 
 		// Ensure a user was found
 		if(results.size() < 1)
-			return false;
+			return new UserSessionPOD(false, null);
 
 		DataObject_User retrievedUser = (DataObject_User) results.get(0);
 		String expectedPassword = retrievedUser.getPassword();
@@ -48,9 +48,9 @@ public class DataServices {
 
 		// Compare passwords
 		if(givenPassword.equals(expectedPassword)){
-			return true;
+			return new UserSessionPOD(true, retrievedUser);
 		} else {
-			return false;
+			return new UserSessionPOD(false, null);
 		}
 	}
 

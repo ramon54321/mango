@@ -19,8 +19,6 @@ import main.utilities.*;
 
 public class ServletSignIn extends HttpServlet{
 
-	private DataObject_User userToLogIn = null;
-
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
 		HttpSession session = request.getSession();
@@ -28,68 +26,22 @@ public class ServletSignIn extends HttpServlet{
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
-		boolean validUser = validateCredentials(username, password);
+		UserSessionPOD user = DataServices.validateCredentials(username, password);
 
-		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + validUser + " - IP: " + request.getRemoteAddr());
+		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + user.successfulLogin + " - IP: " + request.getRemoteAddr());
 
-		if(validUser){
+		if(user.successfulLogin){
 			System.out.println("Sign in valid. User will be given session.");
-			session.setAttribute("userid", userToLogIn.getUserId());
-			session.setAttribute("username", userToLogIn.getUsername());
-			session.setAttribute("firstname", userToLogIn.getFirstname());
-			session.setAttribute("lastname", userToLogIn.getLastname());
-			session.setAttribute("email", userToLogIn.getEmail());
-			session.setAttribute("level", userToLogIn.getLevel());
+			session.setAttribute("userid", user.user.getUserId());
+			session.setAttribute("username", user.user.getUsername());
+			session.setAttribute("firstname", user.user.getFirstname());
+			session.setAttribute("lastname", user.user.getLastname());
+			session.setAttribute("email", user.user.getEmail());
+			session.setAttribute("level", user.user.getLevel());
 			response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
 		} else {
 			session.invalidate();
 			response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
 		}
 	}
-
-	private boolean validateCredentials(String username, String password) {
-
-		if(username.equals("exec")){
-
-			//Hibernate.addUser(new DataObject_User("andrew", "goodwill", 0, "andrew@mail.com"));
-
-			//WebLog.log("This should be a line.");
-			WebLog.truncate();
-
-			return false;
-		}
-
-		// Open session and get user from database given username
-		Session session = Hibernate.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		String hql = "FROM DataObject_User WHERE username = :username";
-		Query query = session.createQuery(hql);
-		query.setParameter("username", username);
-		List results = query.list();
-
-		System.out.println("List length: " + results.size());
-		session.getTransaction().commit();
-		session.close();
-
-		// Ensure a user was found
-		if(results.size() < 1)
-			return false;
-
-		DataObject_User retrievedUser = (DataObject_User) results.get(0);
-		String expectedPassword = retrievedUser.getPassword();
-		String givenPassword = DataServices.getHash(password);
-
-		System.out.println("Given: " + givenPassword);
-		System.out.println("Expected: " + expectedPassword);
-
-		// Compare passwords
-		if(givenPassword.equals(expectedPassword)){
-			userToLogIn = retrievedUser;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

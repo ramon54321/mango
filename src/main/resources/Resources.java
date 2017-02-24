@@ -12,6 +12,10 @@ import java.util.List;
 import org.hibernate.Query;
 import main.utilities.*;
 import javax.ws.rs.core.*;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Path("")
 public class Resources {
@@ -99,30 +103,33 @@ public class Resources {
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("users/signin")
-	public String userSignIn(@HeaderParam("username") String username, @HeaderParam("password") String password){
+	public String userSignIn(@HeaderParam("username") String username, @HeaderParam("password") String password, @Context HttpServletRequest request, @Context HttpServletResponse response){
 
-		boolean validUser = DataServices.validateCredentials(username, password);
+		UserSessionPOD user = DataServices.validateCredentials(username, password);
 
-		return String.valueOf(validUser);
+		HttpSession session = request.getSession();
 
-/*
-		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + validUser + " - IP: " + request.getRemoteAddr());
+		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + user.successfulLogin + " - IP: " + request.getRemoteAddr());
 
-		if(validUser){
-			System.out.println("Sign in valid. User will be given session.");
-			session.setAttribute("userid", userToLogIn.getUserId());
-			session.setAttribute("username", userToLogIn.getUsername());
-			session.setAttribute("firstname", userToLogIn.getFirstname());
-			session.setAttribute("lastname", userToLogIn.getLastname());
-			session.setAttribute("email", userToLogIn.getEmail());
-			session.setAttribute("level", userToLogIn.getLevel());
-			response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
-		} else {
-			session.invalidate();
-			response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+		try{
+			if(user.successfulLogin){
+				System.out.println("Sign in valid. User will be given session.");
+				session.setAttribute("userid", user.user.getUserId());
+				session.setAttribute("username", user.user.getUsername());
+				session.setAttribute("firstname", user.user.getFirstname());
+				session.setAttribute("lastname", user.user.getLastname());
+				session.setAttribute("email", user.user.getEmail());
+				session.setAttribute("level", user.user.getLevel());
+				response.sendRedirect(request.getContextPath() + "/pages/member/wall.jsp");
+			} else {
+				session.invalidate();
+				response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
+			}
+		} catch (Exception e){
+			
 		}
-		*/
 
+		return String.valueOf(user.successfulLogin);
 	}
 
 	// Notes -----------------------------------
