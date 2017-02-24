@@ -61,22 +61,21 @@ The flowchart is always kept up to date with progress and is considered to be th
       - userid is also an int and will require being cast.
       
 - RESTful API.
-   - The following is a list of urls which are accessable.
+   - The following is a list of urls which are accessable. (FormParam) **Not JSON!**
      - users/
      - users/username/{username}
      - users/userid/{userid}
+     - users/signin (username, password)
+     - users/signup (username, password, email, firstname, lastname, accesscode)
      - notes/
+     - notes/addnote (username, title, note)
      
 - Directory Structure.
-   - pages/
+   - pages/ **Incorrect!**
       - signin.jsp
       - signup.jsp
       - member/ (authfilter)
          - addnote.jsp
          - wall.jsp
-   - serv/
-      - signin
-      - signup
-      - addnote
    - rest/
       - See above.
