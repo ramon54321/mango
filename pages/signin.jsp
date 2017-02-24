@@ -2,7 +2,7 @@
 
 <h2>Sign In</h2>
 <p>The dev username and password is admin and admin.</p>
-<form method="POST" action="/app1/serv/signin">
+<form method="POST" action="/serv/signin">
 	<p>Username:</p>
 	<input type="text" name="username">
 	<p>Password:</p>

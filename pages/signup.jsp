@@ -1,7 +1,7 @@
 <p>Session ID: <%= session.getId() %></p>
 
 <h2>Sign Up</h2>
-<form method="POST" action="/app1/serv/signup">
+<form method="POST" action="/serv/signup">
 	<p>Username:</p>
 	<input type="text" name="username">
 	<p>Password:</p>
