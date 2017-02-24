@@ -44,8 +44,8 @@ Development trello: https://trello.com/b/YAlDCXr3/master-development
 The flowchart is always kept up to date with progress and is considered to be the live view of how the application functions.
 
 - Users and Authentication.
-   - The users are divided into 3 catagories; normal, manager and admin, with level values of 0, 1 and 2 respectively. Normal members cannot access the editgroup.jsp, which can be seen in the flowchart. Admin currently has no benifit over manager, but is reserved for future use. Note, the green in the flowchart corresponds to 'NO ACCOUNT' and not to normal members. Normal memebrs are reflected with blue coloring in the flowchart.
-      - User permissions can be given on user creation by typing 'manager' or 'admin' into the access code field upon account creation.
+   - The users are divided into 2 catagories; normal and admin, with level values of 0 and 1 respectively. Normal members cannot access the editgroup.jsp, which can be seen in the flowchart. Note, the green in the flowchart corresponds to 'NO ACCOUNT' and not to normal members. Normal memebrs are reflected with blue coloring in the flowchart.
+      - User permissions can be given on user creation by typing 'admin' into the access code field upon account creation.
    - Authentication
       - Currently user passwords are hashed with the MD5 algorithm. This way the database does not know the password of the user, and is able to compare a signin password with a stored password without knowing the actual password, since the hashed versions are compaired.
       
@@ -78,4 +78,4 @@ The flowchart is always kept up to date with progress and is considered to be th
          - addnote.jsp
          - wall.jsp
    - rest/
-      - See above.
+      - member/ (suthfilter) **Unsure about usage with REST**
