@@ -43,9 +43,17 @@
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
+			function showMenu() {
+				$('body').append(
+					'<div class="menu">'
+					+ '<a id="commandNew" class="command" href="javascript:void(0)">New</a>'
+					+ '<a class="command" href="javascript:void(0)">Settings</a>'
+					+ '</div>'
+					+ '<div id="menuFooter" class="footer"></div>');
+				$('#commandNew').click(onCommandNew);
+			}
 			function hideNewNote() {
-				$('.newNote').remove();
-				$('#newNoteFooter').remove();
+				$('.newNote, #newNoteFooter').remove();
 			}
 			function onCommandNew() {
 				if ($('.newNote').length == 0) {
@@ -61,7 +69,7 @@
 				}
 			}
 			function onCommandPost() {
-				$.post('../rest/notes/addnote', JSON.stringify({ creatorUsername: 'roger', title: '12345', note: $('.newNoteText').val() }), function() {
+				$.post('../rest/notes/addnote', JSON.stringify({ note: $('.newNoteText').val() }), function() {
 					hideNewNote();
 					loadNotes();
 				});
@@ -82,16 +90,11 @@
 			}
 			$(function () {
 				$.ajaxSetup({ contentType: 'application/json' });
-				$('#commandNew').click(onCommandNew);
+				showMenu();
 				loadNotes();
 			});
 		</script>
 	</head>
 	<body>
-		<div class="menu">
-			<a id="commandNew" class="command" href="javascript:void(0)">New</a>
-			<a class="command" href="javascript:void(0)">Settings</a>
-		</div>
-		<div id="menuFooter" class="footer"></div>
 	</body>
 </html>
