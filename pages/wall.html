@@ -61,7 +61,7 @@
                 }
             }
             function onCommandPost() {
-                $.post('../rest/notes/addnote', { username: 'roger', title: '12345', note: $('.newNoteText').val() }, function() {
+                $.post('../rest/notes/addnote', JSON.stringify({ creatorUsername: 'roger', title: '12345', note: $('.newNoteText').val() }), function() {
                     hideNewNote();
                     loadNotes();
                 });
@@ -81,6 +81,7 @@
                 });
             }
             $(function () {
+                $.ajaxSetup({ contentType: 'application/json' });
                 $('#commandNew').click(onCommandNew);
                 loadNotes();
             });
