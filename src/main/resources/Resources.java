@@ -159,6 +159,23 @@ public class Resources {
 		return new Status(true, "User created");
 	}
 
+	// Session ---------------------------------
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("session/issignedin")
+	public Status signup(@Context HttpServletRequest request){
+
+		HttpSession httpSession = request.getSession();
+		Object userId = httpSession.getAttribute("userid");
+
+		if(userId == null){
+			return new Status(false, "Userid attribute null");
+		} else {
+			return new Status(true, "Userid attribute found: " + ((int) userId));
+		}
+	}
+
 	// Notes -----------------------------------
 
 	@GET
@@ -200,6 +217,68 @@ public class Resources {
 		WebLog.log("New note created by Username: " + note.getCreatorUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
 		return new Status(true, "Note created");
+	}
+
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("notes/activate/{id}")
+	public Note setNoteActive(@PathParam("id") String idin){
+
+		try {
+			int id = Integer.valueOf(String.valueOf(idin));
+
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+
+			String hql = "FROM Note WHERE noteId = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List results = query.list();
+
+			System.out.println("List length: " + results.size());
+			session.getTransaction().commit();
+			session.close();
+
+			Note retrievedNote = (Note) results.get(0);
+
+			retrievedNote.setActive(true);
+
+			return retrievedNote;
+
+		} catch (Exception e){
+			return null;
+		}
+	}
+
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("notes/deactivate/{id}")
+	public Note setNoteDeactive(@PathParam("id") String idin){
+
+		try {
+			int id = Integer.valueOf(String.valueOf(idin));
+
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+
+			String hql = "FROM Note WHERE noteId = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List results = query.list();
+
+			System.out.println("List length: " + results.size());
+			session.getTransaction().commit();
+			session.close();
+
+			Note retrievedNote = (Note) results.get(0);
+
+			retrievedNote.setActive(false);
+
+			return retrievedNote;
+
+		} catch (Exception e){
+			return null;
+		}
 	}
 
 }

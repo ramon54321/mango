@@ -13,15 +13,26 @@ public class Note {
 	private String creatorUsername;
 	private String title;
 	private String note;
+	private boolean active;
 
 	public Note(){
 
 	}
 
-	public Note(String creatorUsername, String title, String note){
+	public Note(String creatorUsername, String title, String note, boolean active){
 		this.creatorUsername = creatorUsername;
 		this.title = title;
 		this.note = note;
+		this.active = active;
+	}
+
+	public void setActive(boolean active){
+		this.active = active;
+	}
+
+	@XmlElement
+	public boolean getActive(){
+		return this.active;
 	}
 
 	public void setNoteId(int noteId){
