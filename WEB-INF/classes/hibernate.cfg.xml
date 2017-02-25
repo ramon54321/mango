@@ -29,7 +29,7 @@
     <!-- Drop and re-create the database schema on startup -->
     <property name="hbm2ddl.auto">update</property>
 
-    <mapping class="main.dto.DataObject_User"/>
-    <mapping class="main.dto.DataObject_Note"/>
+    <mapping class="main.dto.User"/>
+    <mapping class="main.dto.Note"/>
   </session-factory>
 </hibernate-configuration>
