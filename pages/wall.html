@@ -1,97 +1,97 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Mango</title>
-        <style>
-            body {
-                background-color: #f0f8ff;
-            }
-            .menu, .newNote, .header, .body {
-                width: 50%;
-                margin: 0px auto;
-                padding: 5px 10px 5px 10px;
-            }
-            .menu {
-                border-radius: 10px;
-                background-color: #f4fff4;
-            }
-            .command {
-                margin-right: 10px;
-            }
-            .newNote {
-                padding: 10px 10px 5px 10px;
-                border-radius: 10px;
-                background-color: #f4fff4;
-            }
-            .newNoteText {
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .header {
-                border-radius: 10px 10px 0px 0px;
-                font-size: 80%;
-                background-color: #f4fff4;
-            }
-            .body {
-                border-radius: 0px 0px 10px 10px;
-                background-color: #ffffff;
-            }
-            .footer {
-                height: 10px;
-            }
-        </style>
-        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-        <script>
-            function hideNewNote() {
-                $('.newNote').remove();
-                $('#newNoteFooter').remove();
-            }
-            function onCommandNew() {
-                if ($('.newNote').length == 0) {
-                    $('#menuFooter').after(
-                        '<div class="newNote">'
-                        + '<textarea class="newNoteText" rows="10"></textarea>'
-                        + '<a id="commandPost" class="command" href="javascript:void(0)">Post</a>'
-                        + '</div>'
-                        + '<div id="newNoteFooter" class="footer"></div>');
-                    $('#commandPost').click(onCommandPost);
-                } else {
-                    hideNewNote();
-                }
-            }
-            function onCommandPost() {
-                $.post('../rest/notes/addnote', JSON.stringify({ creatorUsername: 'roger', title: '12345', note: $('.newNoteText').val() }), function() {
-                    hideNewNote();
-                    loadNotes();
-                });
-            }
-            function loadNotes() {
-                $('.header, .body').remove();
-                $('.footer').not('#menuFooter').remove();
-                $.get('../rest/notes', function (response) {
-                    for (var i in response) {
-                        $('body').append(
-                            '<div class="header">'
-                            + response[i].creatorUsername
-                            + ' at 2017-01-01 00:00</div><div class="body">'
-                            + response[i].note
-                            + '</div><div class="footer"></div>');
-                    }
-                });
-            }
-            $(function () {
-                $.ajaxSetup({ contentType: 'application/json' });
-                $('#commandNew').click(onCommandNew);
-                loadNotes();
-            });
-        </script>
-    </head>
-    <body>
-        <div class="menu">
-            <a id="commandNew" class="command" href="javascript:void(0)">New</a>
-            <a class="command" href="javascript:void(0)">Settings</a>
-        </div>
-        <div id="menuFooter" class="footer"></div>
-    </body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mango</title>
+		<style>
+			body {
+				background-color: #f0f8ff;
+			}
+			.menu, .newNote, .header, .body {
+				width: 50%;
+				margin: 0px auto;
+				padding: 5px 10px 5px 10px;
+			}
+			.menu {
+				border-radius: 10px;
+				background-color: #f4fff4;
+			}
+			.command {
+				margin-right: 10px;
+			}
+			.newNote {
+				padding: 10px 10px 5px 10px;
+				border-radius: 10px;
+				background-color: #f4fff4;
+			}
+			.newNoteText {
+				width: 100%;
+				box-sizing: border-box;
+			}
+			.header {
+				border-radius: 10px 10px 0px 0px;
+				font-size: 80%;
+				background-color: #f4fff4;
+			}
+			.body {
+				border-radius: 0px 0px 10px 10px;
+				background-color: #ffffff;
+			}
+			.footer {
+				height: 10px;
+			}
+		</style>
+		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+		<script>
+			function hideNewNote() {
+				$('.newNote').remove();
+				$('#newNoteFooter').remove();
+			}
+			function onCommandNew() {
+				if ($('.newNote').length == 0) {
+					$('#menuFooter').after(
+						'<div class="newNote">'
+						+ '<textarea class="newNoteText" rows="10"></textarea>'
+						+ '<a id="commandPost" class="command" href="javascript:void(0)">Post</a>'
+						+ '</div>'
+						+ '<div id="newNoteFooter" class="footer"></div>');
+					$('#commandPost').click(onCommandPost);
+				} else {
+					hideNewNote();
+				}
+			}
+			function onCommandPost() {
+				$.post('../rest/notes/addnote', JSON.stringify({ creatorUsername: 'roger', title: '12345', note: $('.newNoteText').val() }), function() {
+					hideNewNote();
+					loadNotes();
+				});
+			}
+			function loadNotes() {
+				$('.header, .body').remove();
+				$('.footer').not('#menuFooter').remove();
+				$.get('../rest/notes', function (response) {
+					for (var i in response) {
+						$('body').append(
+							'<div class="header">'
+							+ response[i].creatorUsername
+							+ ' at 2017-01-01 00:00</div><div class="body">'
+							+ response[i].note
+							+ '</div><div class="footer"></div>');
+					}
+				});
+			}
+			$(function () {
+				$.ajaxSetup({ contentType: 'application/json' });
+				$('#commandNew').click(onCommandNew);
+				loadNotes();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="menu">
+			<a id="commandNew" class="command" href="javascript:void(0)">New</a>
+			<a class="command" href="javascript:void(0)">Settings</a>
+		</div>
+		<div id="menuFooter" class="footer"></div>
+	</body>
 </html>
