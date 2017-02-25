@@ -12,13 +12,4 @@
 	    <servlet-name>Jersey REST Service</servlet-name>
 	    <url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-	<filter>
-	   <filter-name>authfilter</filter-name>
-	   <filter-class>main.FilterMember</filter-class>
-	</filter>
-	<filter-mapping>
-	   <filter-name>authfilter</filter-name>
-	   <url-pattern>/pages/member/*</url-pattern>
-		 <url-pattern>/rest/member/*</url-pattern>
-	</filter-mapping>
 </web-app>

@@ -26,7 +26,7 @@ public class DataServices {
 		Session session = Hibernate.getSessionFactory().openSession();
 		session.beginTransaction();
 
-		String hql = "FROM DataObject_User WHERE username = :username";
+		String hql = "FROM User WHERE username = :username";
 		Query query = session.createQuery(hql);
 		query.setParameter("username", username);
 		List results = query.list();
@@ -39,7 +39,7 @@ public class DataServices {
 		if(results.size() < 1)
 			return new UserSessionPOD(false, null);
 
-		DataObject_User retrievedUser = (DataObject_User) results.get(0);
+		User retrievedUser = (User) results.get(0);
 		String expectedPassword = retrievedUser.getPassword();
 		String givenPassword = getHash(password);
 

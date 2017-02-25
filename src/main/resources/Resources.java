@@ -23,13 +23,13 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("users/username/{username}")
-	public DataObject_User user_username(@PathParam("username") String username){
+	public User user_username(@PathParam("username") String username){
 
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			String hql = "FROM DataObject_User WHERE username = :username";
+			String hql = "FROM User WHERE username = :username";
 			Query query = session.createQuery(hql);
 			query.setParameter("username", username);
 			List results = query.list();
@@ -38,7 +38,7 @@ public class Resources {
 			session.getTransaction().commit();
 			session.close();
 
-			DataObject_User retrievedUser = (DataObject_User) results.get(0);
+			User retrievedUser = (User) results.get(0);
 
 			return retrievedUser;
 
@@ -50,7 +50,7 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("users/userid/{id}")
-	public DataObject_User user_userid(@PathParam("id") String idin){
+	public User user_userid(@PathParam("id") String idin){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -58,7 +58,7 @@ public class Resources {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			String hql = "FROM DataObject_User WHERE userId = :id";
+			String hql = "FROM User WHERE userId = :id";
 			Query query = session.createQuery(hql);
 			query.setParameter("id", id);
 			List results = query.list();
@@ -67,7 +67,7 @@ public class Resources {
 			session.getTransaction().commit();
 			session.close();
 
-			DataObject_User retrievedUser = (DataObject_User) results.get(0);
+			User retrievedUser = (User) results.get(0);
 
 			return retrievedUser;
 
@@ -85,10 +85,10 @@ public class Resources {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			String hql = "FROM DataObject_User";
+			String hql = "FROM User";
 			Query query = session.createQuery(hql);
-			List<DataObject_User> results = (List<DataObject_User>) query.list();
-			GenericEntity<List<DataObject_User>> list = new GenericEntity<List<DataObject_User>>(results){};
+			List<User> results = (List<User>) query.list();
+			GenericEntity<List<User>> list = new GenericEntity<List<User>>(results){};
 
 			session.getTransaction().commit();
 			session.close();
@@ -101,15 +101,16 @@ public class Resources {
 	}
 
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("users/signin")
-	public String userSignIn(@FormParam("username") String username, @FormParam("password") String password, @Context HttpServletRequest request, @Context HttpServletResponse response){
+	public Status userSignIn(SignIn signIn, @Context HttpServletRequest request){
 
-		UserSessionPOD user = DataServices.validateCredentials(username, password);
+		UserSessionPOD user = DataServices.validateCredentials(signIn.getUsername(), signIn.getPassword());
 
 		HttpSession session = request.getSession();
 
-		WebLog.log("Sign In Attempt - Username: " + username + " - Valid: " + user.successfulLogin + " - IP: " + request.getRemoteAddr());
+		WebLog.log("Sign In Attempt - Username: " + signIn.getUsername() + " - Valid: " + user.successfulLogin + " - IP: " + request.getRemoteAddr());
 
 		try {
 			if(user.successfulLogin){
@@ -120,36 +121,29 @@ public class Resources {
 				session.setAttribute("lastname", user.user.getLastname());
 				session.setAttribute("email", user.user.getEmail());
 				session.setAttribute("level", user.user.getLevel());
-				return "success";
+				return new Status(true, "User logged in");
 			} else {
 				session.invalidate();
-				return "failed";
+				return new Status(false, "Incorrect details, session invalidated");
 			}
-		} catch (Exception e){ e.printStackTrace(); return "failed"; }
+		} catch (Exception e){ e.printStackTrace(); return new Status(false, "Database query failed"); }
 	}
 
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("users/signup")
-	public String signup(@FormParam("username") String username, @FormParam("password") String password,
-											@FormParam("email") String email, @FormParam("firstname") String firstname, @FormParam("lastname") String lastname,
-											@FormParam("accesscode") String accesscode, @Context HttpServletRequest request, @Context HttpServletResponse response){
+	public Status signup(User user, @Context HttpServletRequest request){
 
 		// Checks
-		if(password.length() < 5)
-			return "password_to_short";
+		if(user.getPassword().length() < 5)
+			return new Status(false, "Password to short");
 
-		if(username.length() < 5)
-			return "username_to_short";
+		if(user.getUsername().length() < 5)
+			return new Status(false, "Username to short");
 
-		// Access Code
-		int level = 0;
-		if(accesscode.equals("manager"))
-			level = 1;
-		if(accesscode.equals("admin"))
-			level = 2;
-
-		DataObject_User newUser = new DataObject_User(username, password, level, email, firstname, lastname);
+		// Need to create local object in order to run constructor which hashes the password
+		User newUser = new User(user.getUsername(), user.getPassword(), user.getLevel(), user.getEmail(), user.getFirstname(), user.getLastname());
 
 		// Open session
 		try {
@@ -158,11 +152,11 @@ public class Resources {
 			session.save(newUser);
 			session.getTransaction().commit();
 			session.close();
-		} catch (Exception e) { e.printStackTrace(); return "failed"; }
+		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to insert user into databse"); }
 
-		WebLog.log("New user created with Username: " + username + " - IP: " + request.getRemoteAddr());
+		WebLog.log("New user created with Username: " + user.getUsername() + " - IP: " + request.getRemoteAddr());
 
-		return "success";
+		return new Status(true, "User created");
 	}
 
 	// Notes -----------------------------------
@@ -171,15 +165,14 @@ public class Resources {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("notes")
 	public Response notes(){
-
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			String hql = "FROM DataObject_Note";
+			String hql = "FROM Note";
 			Query query = session.createQuery(hql);
-			List<DataObject_Note> results = (List<DataObject_Note>) query.list();
-			GenericEntity<List<DataObject_Note>> list = new GenericEntity<List<DataObject_Note>>(results){};
+			List<Note> results = (List<Note>) query.list();
+			GenericEntity<List<Note>> list = new GenericEntity<List<Note>>(results){};
 
 			session.getTransaction().commit();
 			session.close();
@@ -192,34 +185,21 @@ public class Resources {
 	}
 
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("notes/addnote")
-	public String addNote(DataObject_Note note, @Context HttpServletRequest request, @Context HttpServletResponse response){
-
-		/*
-		// Checks
-		if(title.length() < 5)
-			return "title_to_short";
-
-		if(note.length() < 5)
-			return "note_to_short";
-
-		DataObject_Note newNote = new DataObject_Note(username, title, note);
-		*/
-
-		// Open session
+	public Status addNote(Note note, @Context HttpServletRequest request){
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 			session.save(note);
 			session.getTransaction().commit();
 			session.close();
-		} catch (Exception e) { e.printStackTrace(); return "failed"; }
+		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to save to database"); }
 
 		WebLog.log("New note created by Username: " + note.getCreatorUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
-		return "success";
+		return new Status(true, "Note created");
 	}
 
 }

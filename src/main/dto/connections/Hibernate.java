@@ -16,12 +16,4 @@ public class Hibernate {
 
 		return sessionFactory;
 	}
-
-	public static void addUser(DataObject_User user){
-		Session session = Hibernate.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.save(user);
-		session.getTransaction().commit();
-		session.close();
-	}
 }

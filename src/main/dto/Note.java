@@ -1,12 +1,11 @@
 package main.dto;
 
 import javax.persistence.*;
-import main.dto.connections.*;
 import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 @Entity
-public class DataObject_Note {
+public class Note {
 
 	@Id
 	@GeneratedValue
@@ -15,11 +14,11 @@ public class DataObject_Note {
 	private String title;
 	private String note;
 
-	public DataObject_Note(){
+	public Note(){
 
 	}
 
-	public DataObject_Note(String creatorUsername, String title, String note){
+	public Note(String creatorUsername, String title, String note){
 		this.creatorUsername = creatorUsername;
 		this.title = title;
 		this.note = note;

@@ -1,13 +1,12 @@
 package main.dto;
 
 import javax.persistence.*;
-import main.dto.connections.*;
 import main.utilities.*;
 import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 @Entity
-public class DataObject_User {
+public class User {
 
 	@Id
 	@GeneratedValue
@@ -19,11 +18,11 @@ public class DataObject_User {
 	private String firstname;
 	private String lastname;
 
-	public DataObject_User(){
+	public User(){
 
 	}
 
-	public DataObject_User(String username, String password, int level, String email, String firstname, String lastname){
+	public User(String username, String password, int level, String email, String firstname, String lastname){
 		this.username = username;
 		this.password = DataServices.getHash(password);
 		this.level = level;
