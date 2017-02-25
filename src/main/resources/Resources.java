@@ -193,9 +193,11 @@ public class Resources {
 
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("notes/addnote")
-	public String addNote(@FormParam("username") String username, @FormParam("title") String title, @FormParam("note") String note, @Context HttpServletRequest request, @Context HttpServletResponse response){
+	public String addNote(DataObject_Note note, @Context HttpServletRequest request, @Context HttpServletResponse response){
 
+		/*
 		// Checks
 		if(title.length() < 5)
 			return "title_to_short";
@@ -204,17 +206,18 @@ public class Resources {
 			return "note_to_short";
 
 		DataObject_Note newNote = new DataObject_Note(username, title, note);
+		*/
 
 		// Open session
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			session.save(newNote);
+			session.save(note);
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) { e.printStackTrace(); return "failed"; }
 
-		WebLog.log("New note created by Username: " + username + " - Titled: "  + title + " - IP: " + request.getRemoteAddr());
+		WebLog.log("New note created by Username: " + note.getCreatorUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
 		return "success";
 	}

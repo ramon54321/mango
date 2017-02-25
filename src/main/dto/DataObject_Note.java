@@ -2,7 +2,9 @@ package main.dto;
 
 import javax.persistence.*;
 import main.dto.connections.*;
+import javax.xml.bind.annotation.*;
 
+@XmlRootElement
 @Entity
 public class DataObject_Note {
 
@@ -27,6 +29,7 @@ public class DataObject_Note {
 		this.noteId = noteId;
 	}
 
+	@XmlElement
 	public int getNoteId(){
 		return this.noteId;
 	}
@@ -35,6 +38,7 @@ public class DataObject_Note {
 		this.creatorUsername = creatorUsername;
 	}
 
+	@XmlElement
 	public String getCreatorUsername(){
 		return this.creatorUsername;
 	}
@@ -43,6 +47,7 @@ public class DataObject_Note {
 		this.title = title;
 	}
 
+	@XmlElement
 	public String getTitle(){
 		return this.title;
 	}
@@ -51,6 +56,7 @@ public class DataObject_Note {
 		this.note = note;
 	}
 
+	@XmlElement
 	public String getNote(){
 		return this.note;
 	}
