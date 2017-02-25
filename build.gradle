@@ -9,3 +9,8 @@ dependencies {
 	compile fileTree(include: ['*.jar'], dir: '../lib')
 	compile fileTree(include: ['*.jar'], dir: './WEB-INF/lib')
 }
+
+task myJavadocs(type: Javadoc) {
+  source = sourceSets.main.allJava
+  classpath = configurations.compile
+}
