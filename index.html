@@ -124,7 +124,7 @@
 			function showNotes() {
 				$.get('rest/notes', function (response) {
 					response.sort(function(a, b) {
-						return a.dateCreated < b.dateCreated;
+						return Date.parse(b.dateCreated) - Date.parse(a.dateCreated);
 					});
 					for (var i = 0; i < response.length; i++) {
 						$('body').append(
