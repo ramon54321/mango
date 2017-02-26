@@ -7,6 +7,7 @@ sourceSets {
 
 dependencies {
 	compile fileTree(include: ['*.jar'], dir: '../lib')
+	compile fileTree(include: ['*.jar'], dir: 'C:/Program Files/glassfish-4.1.1/glassfish/lib')
 	compile fileTree(include: ['*.jar'], dir: './WEB-INF/lib')
 }
 
