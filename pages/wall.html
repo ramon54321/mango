@@ -1,97 +1,198 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Mango</title>
-        <style>
-            body {
-                background-color: #f0f8ff;
-            }
-            .menu, .newNote, .header, .body {
-                width: 50%;
-                margin: 0px auto;
-                padding: 5px 10px 5px 10px;
-            }
-            .menu {
-                border-radius: 10px;
-                background-color: #f4fff4;
-            }
-            .command {
-                margin-right: 10px;
-            }
-            .newNote {
-                padding: 10px 10px 5px 10px;
-                border-radius: 10px;
-                background-color: #f4fff4;
-            }
-            .newNoteText {
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .header {
-                border-radius: 10px 10px 0px 0px;
-                font-size: 80%;
-                background-color: #f4fff4;
-            }
-            .body {
-                border-radius: 0px 0px 10px 10px;
-                background-color: #ffffff;
-            }
-            .footer {
-                height: 10px;
-            }
-        </style>
-        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-        <script>
-            function hideNewNote() {
-                $('.newNote').remove();
-                $('#newNoteFooter').remove();
-            }
-            function onCommandNew() {
-                if ($('.newNote').length == 0) {
-                    $('#menuFooter').after(
-                        '<div class="newNote">'
-                        + '<textarea class="newNoteText" rows="10"></textarea>'
-                        + '<a id="commandPost" class="command" href="javascript:void(0)">Post</a>'
-                        + '</div>'
-                        + '<div id="newNoteFooter" class="footer"></div>');
-                    $('#commandPost').click(onCommandPost);
-                } else {
-                    hideNewNote();
-                }
-            }
-            function onCommandPost() {
-                $.post('../rest/notes/addnote', JSON.stringify({ creatorUsername: 'roger', title: '12345', note: $('.newNoteText').val() }), function() {
-                    hideNewNote();
-                    loadNotes();
-                });
-            }
-            function loadNotes() {
-                $('.header, .body').remove();
-                $('.footer').not('#menuFooter').remove();
-                $.get('../rest/notes', function (response) {
-                    for (var i in response) {
-                        $('body').append(
-                            '<div class="header">'
-                            + response[i].creatorUsername
-                            + ' at 2017-01-01 00:00</div><div class="body">'
-                            + response[i].note
-                            + '</div><div class="footer"></div>');
-                    }
-                });
-            }
-            $(function () {
-                $.ajaxSetup({ contentType: 'application/json' });
-                $('#commandNew').click(onCommandNew);
-                loadNotes();
-            });
-        </script>
-    </head>
-    <body>
-        <div class="menu">
-            <a id="commandNew" class="command" href="javascript:void(0)">New</a>
-            <a class="command" href="javascript:void(0)">Settings</a>
-        </div>
-        <div id="menuFooter" class="footer"></div>
-    </body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mango</title>
+		<style>
+			body {
+				background-color: #f0f8ff;
+			}
+			.menu, .newNote, .header, .body {
+				width: 50%;
+				margin: 0px auto;
+				padding: 5px 10px 5px 10px;
+			}
+			.menu {
+				border-radius: 10px;
+				background-color: #f4fff4;
+			}
+			.command {
+				margin-right: 10px;
+			}
+			.newNote {
+				padding: 10px 10px 5px 10px;
+				border-radius: 10px;
+				background-color: #f4fff4;
+			}
+			.newNoteText {
+				width: 100%;
+				box-sizing: border-box;
+			}
+			.header {
+				border-radius: 10px 10px 0px 0px;
+				font-size: 80%;
+				background-color: #f4fff4;
+			}
+			.body {
+				border-radius: 0px 0px 10px 10px;
+				background-color: #ffffff;
+			}
+			.footer {
+				height: 10px;
+			}
+			.signIn {
+				width: 25%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				border-radius: 20px;
+				background-color: #ffffff;
+			}
+			.signInHeader, .signInLeftTab, .signInRightTab, .signInBody, .signInItem, .signInInput {
+				box-sizing: border-box;
+			}
+			.signInHeader, .signInItem, .signInInput {
+				width: 100%;
+			}
+			.signInHeader {
+				border-radius: 20px 20px 0px 0px;
+				background-color: #d0ffd0;
+			}
+			.signInLeftTab, .signInRightTab {
+				display: inline-block;
+				width: 50%;
+				padding: 10px;
+				text-align: center;
+			}
+			.signInLeftTab {
+				border-radius: 20px 20px 0px 0px;
+			}
+			.signInRightTab {
+				float: right;
+				border-radius: 20px 20px 0px 0px;
+			}
+			.signInBody {
+				padding: 15px;
+			}
+			.signInItem {
+				padding: 10px;
+			}
+		</style>
+		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+		<script>
+			function showMenu() {
+				$('body').append(
+					'<div class="menu">'
+					+ '<a id="commandNew" class="command" href="javascript:void(0)">New</a>'
+					+ '<a class="command" href="javascript:void(0)">Settings</a>'
+					+ '</div>'
+					+ '<div id="menuFooter" class="footer"></div>');
+				$('#commandNew').click(onCommandNew);
+			}
+			function hideNewNote() {
+				$('.newNote, #newNoteFooter').remove();
+			}
+			function onCommandNew() {
+				if ($('.newNote').length == 0) {
+					$('#menuFooter').after(
+						'<div class="newNote">'
+						+ '<textarea class="newNoteText" rows="10"></textarea>'
+						+ '<a id="commandPost" class="command" href="javascript:void(0)">Post</a>'
+						+ '</div>'
+						+ '<div id="newNoteFooter" class="footer"></div>');
+					$('#commandPost').click(onCommandPost);
+				} else {
+					hideNewNote();
+				}
+			}
+			function onCommandPost() {
+				$.post('../rest/notes/addnote', JSON.stringify({ note: $('.newNoteText').val() }), function() {
+					hideNewNote();
+					loadNotes();
+				});
+			}
+			function loadNotes() {
+				$('.header, .body').remove();
+				$('.footer').not('#menuFooter, #newNoteFooter').remove();
+				$.get('../rest/notes', function (response) {
+					for (var i in response) {
+						$('body').append(
+							'<div class="header">'
+							+ response[i].creatorUsername
+							+ ' at 2017-01-01 00:00</div><div class="body">'
+							+ response[i].note
+							+ '</div><div class="footer"></div>');
+					}
+				});
+			}
+			function isSignedIn() {
+				var a = false;
+				$.ajax({
+					type: 'GET',
+					url: '../rest/session/issignedin',
+					async: false,
+					success: function (response) {
+						a = response.status;
+					}
+				});
+				return a;
+			}
+			function moveTabToFront(a) {
+				a.css('background-color', '#ffffff');
+				a.append('<span>' + a.children().remove().text() + '</span>');
+			}
+			function moveTabToBack(a, b) {
+				a.css('background-color', '#d0ffd0');
+				a.append('<a href="javascript:void(0)">' + a.children().remove().text() + '</a>');
+				a.children().click(b);
+			}
+			function onSignInLeftTab() {
+				moveTabToFront($('.signInLeftTab'));
+				moveTabToBack($('.signInRightTab'), onSignInRightTab);
+			}
+			function onSignInRightTab() {
+				moveTabToFront($('.signInRightTab'));
+				moveTabToBack($('.signInLeftTab'), onSignInLeftTab);
+			}
+			function showSignIn() {
+				$('body').append(
+					'<div class="signIn">'
+					+ '<div class="signInHeader">'
+					+ '<span class="signInLeftTab">'
+					+ '<span>Sign-in</span>'
+					+ '</span>'
+					+ '<span class="signInRightTab">'
+					+ '<a href="javascript:void(0)">Sign-up</a>'
+					+ '</span>'
+					+ '</div>'
+					+ '<div class="signInBody">'
+					+ '<div class="signInItem">'
+					+ '<input class="signInInput" type="text" placeholder="Username">'
+					+ '</div>'
+					+ '<div class="signInItem">'
+					+ '<input class="signInInput" type="password" placeholder="Password">'
+					+ '</div>'
+					+ '<div class="signInItem">'
+					+ '<a class="command" href="javascript:void(0)">Submit</a>'
+					+ '</div>'
+					+ '</div>'
+					+ '</div>');
+				$('body').css('background-color', '#c0e0ff');
+				$('.signInLeftTab').css('background-color', '#ffffff');
+				$('.signInRightTab a').click(onSignInRightTab);
+			}
+			$(function () {
+				$.ajaxSetup({ contentType: 'application/json' });
+				if (isSignedIn()) {
+					showMenu();
+					loadNotes();
+				} else {
+					showSignIn();
+				}
+			});
+		</script>
+	</head>
+	<body>
+	</body>
 </html>
