@@ -12,6 +12,7 @@ public class Note {
 	@Id
 	@GeneratedValue
 	private int noteId;
+	@OneToOne
 	private User user;
 	private String title;
 	private String note;
