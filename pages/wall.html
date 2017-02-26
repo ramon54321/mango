@@ -40,6 +40,44 @@
 			.footer {
 				height: 10px;
 			}
+			.signIn {
+				width: 25%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				border-radius: 20px;
+				background-color: #ffffff;
+			}
+			.signInHeader, .signInLeftTab, .signInRightTab, .signInBody, .signInItem, .signInInput {
+				box-sizing: border-box;
+			}
+			.signInHeader, .signInItem, .signInInput {
+				width: 100%;
+			}
+			.signInHeader {
+				border-radius: 20px 20px 0px 0px;
+				background-color: #d0ffd0;
+			}
+			.signInLeftTab, .signInRightTab {
+				display: inline-block;
+				width: 50%;
+				padding: 10px;
+				text-align: center;
+			}
+			.signInLeftTab {
+				border-radius: 20px 20px 0px 0px;
+			}
+			.signInRightTab {
+				float: right;
+				border-radius: 20px 20px 0px 0px;
+			}
+			.signInBody {
+				padding: 15px;
+			}
+			.signInItem {
+				padding: 10px;
+			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
@@ -76,7 +114,7 @@
 			}
 			function loadNotes() {
 				$('.header, .body').remove();
-				$('.footer').not('#menuFooter').remove();
+				$('.footer').not('#menuFooter, #newNoteFooter').remove();
 				$.get('../rest/notes', function (response) {
 					for (var i in response) {
 						$('body').append(
@@ -88,10 +126,70 @@
 					}
 				});
 			}
+			function isSignedIn() {
+				var a = false;
+				$.ajax({
+					type: 'GET',
+					url: '../rest/session/issignedin',
+					async: false,
+					success: function (response) {
+						a = response.status;
+					}
+				});
+				return a;
+			}
+			function moveTabToFront(a) {
+				a.css('background-color', '#ffffff');
+				a.append('<span>' + a.children().remove().text() + '</span>');
+			}
+			function moveTabToBack(a, b) {
+				a.css('background-color', '#d0ffd0');
+				a.append('<a href="javascript:void(0)">' + a.children().remove().text() + '</a>');
+				a.children().click(b);
+			}
+			function onSignInLeftTab() {
+				moveTabToFront($('.signInLeftTab'));
+				moveTabToBack($('.signInRightTab'), onSignInRightTab);
+			}
+			function onSignInRightTab() {
+				moveTabToFront($('.signInRightTab'));
+				moveTabToBack($('.signInLeftTab'), onSignInLeftTab);
+			}
+			function showSignIn() {
+				$('body').append(
+					'<div class="signIn">'
+					+ '<div class="signInHeader">'
+					+ '<span class="signInLeftTab">'
+					+ '<span>Sign-in</span>'
+					+ '</span>'
+					+ '<span class="signInRightTab">'
+					+ '<a href="javascript:void(0)">Sign-up</a>'
+					+ '</span>'
+					+ '</div>'
+					+ '<div class="signInBody">'
+					+ '<div class="signInItem">'
+					+ '<input class="signInInput" type="text" placeholder="Username">'
+					+ '</div>'
+					+ '<div class="signInItem">'
+					+ '<input class="signInInput" type="password" placeholder="Password">'
+					+ '</div>'
+					+ '<div class="signInItem">'
+					+ '<a class="command" href="javascript:void(0)">Submit</a>'
+					+ '</div>'
+					+ '</div>'
+					+ '</div>');
+				$('body').css('background-color', '#c0e0ff');
+				$('.signInLeftTab').css('background-color', '#ffffff');
+				$('.signInRightTab a').click(onSignInRightTab);
+			}
 			$(function () {
 				$.ajaxSetup({ contentType: 'application/json' });
-				showMenu();
-				loadNotes();
+				if (isSignedIn()) {
+					showMenu();
+					loadNotes();
+				} else {
+					showSignIn();
+				}
 			});
 		</script>
 	</head>
