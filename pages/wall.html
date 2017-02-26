@@ -4,14 +4,13 @@
 		<meta charset="UTF-8">
 		<title>Mango</title>
 		<style>
-			body {
-				// background-color: #f0f8ff;
-				background-color: #c0e0ff;
-			}
 			a {
 				text-decoration: none;
 			}
-			.menu, .newNote, .header, .body {
+			.footer {
+				height: 10px;
+			}
+			.menu, .newNote, .noteHeader, .noteBody {
 				width: 50%;
 				margin: 0px auto;
 				padding: 5px 10px 5px 10px;
@@ -20,7 +19,7 @@
 				border-radius: 10px;
 				background-color: #f4fff4;
 			}
-			.command {
+			.menuCommand {
 				margin-right: 10px;
 			}
 			.newNote {
@@ -32,17 +31,14 @@
 				width: 100%;
 				box-sizing: border-box;
 			}
-			.header {
+			.noteHeader {
 				border-radius: 10px 10px 0px 0px;
 				font-size: 80%;
 				background-color: #f4fff4;
 			}
-			.body {
+			.noteBody {
 				border-radius: 0px 0px 10px 10px;
 				background-color: #ffffff;
-			}
-			.footer {
-				height: 10px;
 			}
 			.sign {
 				width: 250px;
@@ -83,11 +79,12 @@
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
 			function showMenu() {
+				$('body').css('background-color', '#f0f8ff'); // light blue
 				$('body').append(
 					'<div class="menu">'
-					+ '<a id="commandNew" class="command" href="javascript:void(0)">New</a>'
-					+ '<a class="command" href="javascript:void(0)">Settings</a>'
-					+ '<a id="commandSignOut" class="command" href="javascript:void(0)">Sign-out</a>'
+					+ '<a id="commandNew" class="menuCommand" href="javascript:void(0)">New</a>'
+					+ '<a id="commandSettings" class="menuCommand" href="javascript:void(0)">Settings</a>'
+					+ '<a id="commandSignOut" class="menuCommand" href="javascript:void(0)">Sign-out</a>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
 				$('#commandNew').click(onNew);
@@ -104,7 +101,7 @@
 					$('#menuFooter').after(
 						'<div class="newNote">'
 						+ '<textarea class="newNoteText" rows="10"></textarea>'
-						+ '<a id="commandPost" class="command" href="javascript:void(0)">Post</a>'
+						+ '<a id="commandPost" href="javascript:void(0)">Post</a>'
 						+ '</div>'
 						+ '<div id="newNoteFooter" class="footer"></div>');
 					$('#commandPost').click(onPost);
@@ -123,16 +120,16 @@
 				$.get('../rest/notes', function (response) {
 					for (var i in response) {
 						$('body').append(
-							'<div class="header">'
+							'<div class="noteHeader">'
 							+ response[i].creatorUsername
-							+ ' at 2017-01-01 00:00</div><div class="body">'
+							+ ' at 2017-01-01 00:00</div><div class="noteBody">'
 							+ response[i].note
 							+ '</div><div class="footer"></div>');
 					}
 				});
 			}
 			function hideNotes() {
-				$('.header, .body').remove();
+				$('.noteHeader, .noteBody').remove();
 				$('.footer').not('#menuFooter, #newNoteFooter').remove();
 			}
 			function moveTabToFront(a, b) {
@@ -176,10 +173,10 @@
 					+ '</div>'
 					+ '</div>'
 					+ '</div>');
-				// $('body').css('background-color', '#c0e0ff');
+				$('body').css('background-color', '#c0e0ff'); // dark blue
 				$('.signLeftTab').css('background-color', '#ffffff');
-				$('#submit').click(onSignIn);
 				$('.signRightTab a').click(onSignRightTab);
+				$('#submit').click(onSignIn);
 			}
 			function hideSign() {
 				$('.sign').remove();
@@ -221,7 +218,7 @@
 				$.ajaxSetup({ contentType: 'application/json' });
 				if (isSignedIn()) {
 					showMenu();
-					loadNotes();
+					showNotes();
 				} else {
 					showSign();
 				}
