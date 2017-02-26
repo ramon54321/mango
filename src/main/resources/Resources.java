@@ -131,7 +131,6 @@ public class Resources {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("users/signout")
 	public Status signout(@Context HttpServletRequest request){
 
@@ -154,8 +153,7 @@ public class Resources {
 		if(user.getUsername().length() < 5)
 			return new Status(false, "Username to short");
 
-		// Need to create local object in order to run constructor which hashes the password
-		User newUser = new User(user.getUsername(), user.getPassword(), user.getLevel(), user.getEmail(), user.getFirstname(), user.getLastname());
+		user.hashPassword();
 
 		// Open session
 		try {
@@ -193,6 +191,11 @@ public class Resources {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("notes")
 	public Response notes(){
+
+		if(DataServices.getSignedInUserId() == -1){
+			return new Status(false, "NO signed in user");
+		}
+
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
@@ -217,6 +220,14 @@ public class Resources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("notes/addnote")
 	public Status addnote(Note note, @Context HttpServletRequest request){
+
+		if(DataServices.getSignedInUserId() == -1){
+			return new Status(false, "NO signed in user");
+		}
+
+		note.setUser(DataServices.getSignedInUser(request));
+		note.setDateCurrent();
+
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();

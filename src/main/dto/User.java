@@ -29,6 +29,10 @@ public class User {
 		this.email = email;
 	}
 
+	public void hashPassword(){
+		this.password = DataServices.getHash(this.password);
+	}
+
 	public void setUserId(int userId){
 		this.userId = userId;
 	}

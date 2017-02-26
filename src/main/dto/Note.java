@@ -33,6 +33,10 @@ public class Note {
 		this.dateCreated = dateCreated;
 	}
 
+	public void setDateCurrent(){
+		this.dateCreated = new Date();
+	}
+
 	@XmlElement
 	public Date getDateCreated(){
 		return this.dateCreated;
