@@ -159,10 +159,10 @@ public class Resources {
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
-			session.save(newUser);
+			session.save(user);
 			session.getTransaction().commit();
 			session.close();
-		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to insert user into databse"); }
+		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to insert user into database"); }
 
 		WebLog.log("New user created with Username: " + user.getUsername() + " - IP: " + request.getRemoteAddr());
 
@@ -190,10 +190,10 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("notes")
-	public Response notes(){
+	public Response notes(@Context HttpServletRequest request){
 
-		if(DataServices.getSignedInUserId() == -1){
-			return new Status(false, "NO signed in user");
+		if(DataServices.getSignedInUserId(request) == -1){
+			return null;
 		}
 
 		try {
@@ -221,8 +221,8 @@ public class Resources {
 	@Path("notes/addnote")
 	public Status addnote(Note note, @Context HttpServletRequest request){
 
-		if(DataServices.getSignedInUserId() == -1){
-			return new Status(false, "NO signed in user");
+		if(DataServices.getSignedInUserId(request) == -1){
+			return new Status(false, "No signed in user");
 		}
 
 		note.setUser(DataServices.getSignedInUser(request));
