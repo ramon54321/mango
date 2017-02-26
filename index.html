@@ -4,6 +4,9 @@
 		<meta charset="UTF-8">
 		<title>Mango</title>
 		<style>
+			body {
+				background-color: #f0f0f0;
+			}
 			a {
 				text-decoration: none;
 			}
@@ -17,7 +20,7 @@
 			}
 			.menu {
 				border-radius: 10px;
-				background-color: #f4fff4;
+				background-color: #f0f8ff;
 			}
 			.menuCommand {
 				margin-right: 15px;
@@ -34,7 +37,7 @@
 			.noteHeader {
 				border-radius: 10px 10px 0px 0px;
 				font-size: 80%;
-				background-color: #f4fff4;
+				background-color: #f0f8ff;
 			}
 			.noteBody {
 				white-space: pre-wrap;
@@ -58,7 +61,7 @@
 			}
 			.signHeader, .signLeftTab, .signRightTab {
 				border-radius: 20px 20px 0px 0px;
-				background-color: #d0ffd0;
+				background-color: #e0f0ff;
 			}
 			.signLeftTab, .signRightTab {
 				display: inline-block;
@@ -82,7 +85,6 @@
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
 			function showMenu() {
-				$('body').css('background-color', '#f0f8ff'); // light blue
 				$('body').append(
 					'<div class="menu">'
 					+ '<a id="commandNew" class="menuCommand" href="javascript:void(0)">New</a>'
@@ -158,7 +160,7 @@
 				$('.signSuccess, .signFailure').remove();
 			}
 			function moveTabToBack(a, b) {
-				a.css('background-color', '#d0ffd0');
+				a.css('background-color', '#e0f0ff');
 				a.append('<a href="javascript:void(0)">' + a.children().remove().text() + '</a>');
 				a.children().click(b);
 			}
@@ -193,7 +195,6 @@
 					+ '</div>'
 					+ '</div>'
 					+ '</div>');
-				$('body').css('background-color', '#c0e0ff'); // dark blue
 				moveTabToFront($('.signLeftTab'), onSignIn);
 				moveTabToBack($('.signRightTab'), onSignRightTab);
 			}
