@@ -115,14 +115,14 @@
 				}
 			}
 			function onPost() {
-				$.post('../rest/notes/addnote', JSON.stringify({ note: $('.newNoteText').val() }), function() {
+				$.post('rest/notes/addnote', JSON.stringify({ note: $('.newNoteText').val() }), function() {
 					hideNewNote();
 					hideNotes();
 					showNotes();
 				});
 			}
 			function showNotes() {
-				$.get('../rest/notes', function (response) {
+				$.get('rest/notes', function (response) {
 					response.sort(function(a, b) {
 						return a.dateCreated < b.dateCreated;
 					});
@@ -201,7 +201,7 @@
 			}
 			function onSignIn() {
 				$('.signSuccess, .signFailure').remove();
-				$.post('../rest/users/signin', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
+				$.post('rest/users/signin', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
 					if (response.status) {
 						hideSign();
 						showMenu();
@@ -214,7 +214,7 @@
 			function onSignOut() {
 				$.ajax({
 					type: 'POST',
-					url: '../rest/users/signout',
+					url: 'rest/users/signout',
 					async: false
 				});
 				hideMenu();
@@ -223,7 +223,7 @@
 			}
 			function onSignUp() {
 				$('.signSuccess, .signFailure').remove();
-				$.post('../rest/users/signup', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
+				$.post('rest/users/signup', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
 					if (response.status) {
 						$('.signBody').append('<div class="signSuccess">You have been signed up!</div>');
 					} else {
@@ -235,7 +235,7 @@
 				var a = false;
 				$.ajax({
 					type: 'GET',
-					url: '../rest/session/issignedin',
+					url: 'rest/session/issignedin',
 					async: false,
 					success: function (response) {
 						a = response.status;
