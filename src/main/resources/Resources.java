@@ -104,7 +104,7 @@ public class Resources {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("users/signin")
-	public Status userSignIn(SignIn signIn, @Context HttpServletRequest request){
+	public Status signin(SignIn signIn, @Context HttpServletRequest request){
 
 		UserSessionPOD user = DataServices.validateCredentials(signIn.getUsername(), signIn.getPassword());
 
@@ -127,6 +127,18 @@ public class Resources {
 				return new Status(false, "Incorrect details, session invalidated");
 			}
 		} catch (Exception e){ e.printStackTrace(); return new Status(false, "Database query failed"); }
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("users/signout")
+	public Status signout(@Context HttpServletRequest request){
+
+		HttpSession session = request.getSession();
+		session.invalidate();
+
+		return new Status(true, "Session invalidated");
 	}
 
 	@POST
@@ -164,15 +176,14 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("session/issignedin")
-	public Status signup(@Context HttpServletRequest request){
+	public Status issignedin(@Context HttpServletRequest request){
 
-		HttpSession httpSession = request.getSession();
-		Object userId = httpSession.getAttribute("userid");
+		int userid = DataServices.getSignedInUserId(request);
 
-		if(userId == null){
-			return new Status(false, "Userid attribute null");
+		if(userid == -1){
+			return new Status(false, "No user signed in");
 		} else {
-			return new Status(true, "Userid attribute found: " + ((int) userId));
+			return new Status(true, "Userid attribute found: " + userid);
 		}
 	}
 
@@ -205,7 +216,7 @@ public class Resources {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("notes/addnote")
-	public Status addNote(Note note, @Context HttpServletRequest request){
+	public Status addnote(Note note, @Context HttpServletRequest request){
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
@@ -214,7 +225,7 @@ public class Resources {
 			session.close();
 		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to save to database"); }
 
-		WebLog.log("New note created by Username: " + note.getCreatorUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
+		WebLog.log("New note created by Username: " + note.getUser().getUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
 		return new Status(true, "Note created");
 	}
@@ -222,7 +233,7 @@ public class Resources {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("notes/activate/{id}")
-	public Note setNoteActive(@PathParam("id") String idin){
+	public Note activate(@PathParam("id") String idin){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -253,7 +264,7 @@ public class Resources {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("notes/deactivate/{id}")
-	public Note setNoteDeactive(@PathParam("id") String idin){
+	public Note deactivate(@PathParam("id") String idin){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));

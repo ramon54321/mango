@@ -74,4 +74,36 @@ public class DataServices {
 		}
 	}
 
+  public static int getSignedInUserId(HttpServletRequest request){
+    HttpSession httpSession = request.getSession();
+		Object userId = httpSession.getAttribute("userid");
+
+		if(userId == null){
+			return -1;
+		} else {
+			return (int) userId;
+		}
+  }
+
+  public static User getSignedInUser(HttpServletRequest request){
+
+    int userId = getSignedInUserId(request);
+
+    Session session = Hibernate.getSessionFactory().openSession();
+    session.beginTransaction();
+
+    String hql = "FROM User WHERE userId = :id";
+    Query query = session.createQuery(hql);
+    query.setParameter("id", userId);
+    List results = query.list();
+
+    System.out.println("List length: " + results.size());
+    session.getTransaction().commit();
+    session.close();
+
+    User retrievedUser = (User) results.get(0);
+
+    return retrievedUser;
+  }
+
 }

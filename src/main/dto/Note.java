@@ -2,6 +2,8 @@ package main.dto;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import main.dto.*;
+import java.util.Date;
 
 @XmlRootElement
 @Entity
@@ -10,20 +12,30 @@ public class Note {
 	@Id
 	@GeneratedValue
 	private int noteId;
-	private String creatorUsername;
+	private User user;
 	private String title;
 	private String note;
 	private boolean active;
+	private Date dateCreated;
 
 	public Note(){
 
 	}
 
-	public Note(String creatorUsername, String title, String note, boolean active){
-		this.creatorUsername = creatorUsername;
+	public Note(User user, String title, String note, boolean active){
+		this.user = user;
 		this.title = title;
 		this.note = note;
 		this.active = active;
+	}
+
+	public void setDateCreated(Date dateCreated){
+		this.dateCreated = dateCreated;
+	}
+
+	@XmlElement
+	public Date getDateCreated(){
+		return this.dateCreated;
 	}
 
 	public void setActive(boolean active){
@@ -44,13 +56,13 @@ public class Note {
 		return this.noteId;
 	}
 
-	public void setCreatorUsername(String creatorUsername){
-		this.creatorUsername = creatorUsername;
+	public void setUser(User user){
+		this.user = user;
 	}
 
 	@XmlElement
-	public String getCreatorUsername(){
-		return this.creatorUsername;
+	public User getUser(){
+		return this.user;
 	}
 
 	public void setTitle(String title){
