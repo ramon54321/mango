@@ -151,6 +151,7 @@
 				a.css('background-color', '#ffffff');
 				a.append('<span>' + a.children().remove().text() + '</span>');
 				$('#username, #password').val('');
+				$('#username').focus();
 				$('#password').unbind('keypress').keypress(function (event) {
 					if (event.which == 13) {
 						b();
