@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import java.security.MessageDigest;
 import main.dto.connections.*;
 import java.util.List;
+import java.util.ArrayList;
 import org.hibernate.Query;
 import main.utilities.*;
 import javax.ws.rs.core.*;
@@ -23,7 +24,11 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("users/username/{username}")
-	public User user_username(@PathParam("username") String username){
+	public User user_username(@PathParam("username") String username, @Context HttpServletRequest request){
+
+		if(DataServices.getSignedInUserId(request) == -1){
+			return null;
+		}
 
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
@@ -50,7 +55,11 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("users/userid/{id}")
-	public User user_userid(@PathParam("id") String idin){
+	public User user_userid(@PathParam("id") String idin, @Context HttpServletRequest request){
+
+		if(DataServices.getSignedInUserId(request) == -1){
+			return null;
+		}
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -79,7 +88,11 @@ public class Resources {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("users")
-	public Response users(){
+	public Response users(@Context HttpServletRequest request){
+
+		if(DataServices.getSignedInUserId(request) == -1){
+			return null;
+		}
 
 		try {
 			Session session = Hibernate.getSessionFactory().openSession();
@@ -187,10 +200,14 @@ public class Resources {
 
 	// Notes -----------------------------------
 
-	@GET
+	/***
+	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering.
+	*/
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("notes")
-	public Response notes(@Context HttpServletRequest request){
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("notes/")
+	public Response notes(Search search, @Context HttpServletRequest request){
 
 		if(DataServices.getSignedInUserId(request) == -1){
 			return null;
@@ -200,10 +217,28 @@ public class Resources {
 			Session session = Hibernate.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			String hql = "FROM Note";
-			Query query = session.createQuery(hql);
-			List<Note> results = (List<Note>) query.list();
-			GenericEntity<List<Note>> list = new GenericEntity<List<Note>>(results){};
+			String hql = "";
+			Query query;
+			List<Note> results = new ArrayList();
+			GenericEntity<List<Note>> list = null;
+
+			if(!search.search.equals("")){
+				hql = "FROM Note WHERE note like '%" + search.search + "%'";
+			} else {
+				hql = "FROM Note WHERE note like '%#highpriority%' order by dateCreated desc";
+				query = session.createQuery(hql);
+				results.addAll((List<Note>) query.list());
+
+				hql = "FROM Note WHERE note not like '%#highpriority%' and note not like '%#lowpriority%' order by dateCreated desc";
+				query = session.createQuery(hql);
+				results.addAll((List<Note>) query.list());
+
+				hql = "FROM Note WHERE note like '%#lowpriority%' and note not like '%#highpriority%' order by dateCreated desc";
+				query = session.createQuery(hql);
+				results.addAll((List<Note>) query.list());
+
+				list = new GenericEntity<List<Note>>(results){};
+			}
 
 			session.getTransaction().commit();
 			session.close();
@@ -243,8 +278,8 @@ public class Resources {
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("notes/activate/{id}")
-	public Note activate(@PathParam("id") String idin){
+	@Path("notes/complete/{id}")
+	public Note complete(@PathParam("id") String idin){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -263,7 +298,7 @@ public class Resources {
 
 			Note retrievedNote = (Note) results.get(0);
 
-			retrievedNote.setActive(true);
+			retrievedNote.setCompleted(true);
 
 			return retrievedNote;
 
@@ -274,8 +309,8 @@ public class Resources {
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("notes/deactivate/{id}")
-	public Note deactivate(@PathParam("id") String idin){
+	@Path("notes/uncomplete/{id}")
+	public Note uncomplete(@PathParam("id") String idin){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -294,7 +329,7 @@ public class Resources {
 
 			Note retrievedNote = (Note) results.get(0);
 
-			retrievedNote.setActive(false);
+			retrievedNote.setCompleted(false);
 
 			return retrievedNote;
 

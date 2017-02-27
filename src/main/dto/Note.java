@@ -2,7 +2,6 @@ package main.dto;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-import main.dto.*;
 import java.util.Date;
 
 @XmlRootElement
@@ -16,18 +15,22 @@ public class Note {
 	private User user;
 	private String title;
 	private String note;
-	private boolean active;
+	private boolean isTask = false;
+	private boolean pinned = false;
+	private boolean completed = false;
 	private Date dateCreated;
 
 	public Note(){
 
 	}
 
-	public Note(User user, String title, String note, boolean active){
+	public Note(User user, String title, String note, boolean completed, boolean isTask, boolean pinned){
 		this.user = user;
 		this.title = title;
 		this.note = note;
-		this.active = active;
+		this.completed = completed;
+		this.isTask = isTask;
+		this.pinned = pinned;
 	}
 
 	public void setDateCreated(Date dateCreated){
@@ -43,13 +46,31 @@ public class Note {
 		return this.dateCreated;
 	}
 
-	public void setActive(boolean active){
-		this.active = active;
+	public void setCompleted(boolean completed){
+		this.completed = completed;
 	}
 
 	@XmlElement
-	public boolean getActive(){
-		return this.active;
+	public boolean getCompleted(){
+		return this.completed;
+	}
+
+	public void setPinned(boolean pinned){
+		this.pinned = pinned;
+	}
+
+	@XmlElement
+	public boolean getPinned(){
+		return this.pinned;
+	}
+
+	public void setIsTask(boolean isTask){
+		this.isTask = isTask;
+	}
+
+	@XmlElement
+	public boolean getIsTask(){
+		return this.isTask;
 	}
 
 	public void setNoteId(int noteId){
