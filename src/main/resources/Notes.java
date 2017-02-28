@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import main.websockets.*;
 
 @Path("notes/")
 public class Notes {
@@ -107,6 +108,8 @@ public class Notes {
 
 		WebLog.log("New note created by Username: " + note.getUser().getUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
+    WebsocketEndpoint.broadcast();
+
 		return new Status(true, "Note created");
 	}
 
@@ -137,6 +140,8 @@ public class Notes {
 			Note retrievedNote = (Note) results.get(0);
 
 			retrievedNote.setCompleted(true);
+
+      WebsocketEndpoint.broadcast();
 
 			return retrievedNote;
 
@@ -172,6 +177,8 @@ public class Notes {
 			Note retrievedNote = (Note) results.get(0);
 
 			retrievedNote.setCompleted(false);
+
+      WebsocketEndpoint.broadcast();
 
 			return retrievedNote;
 
