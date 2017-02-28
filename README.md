@@ -41,8 +41,6 @@ Overview flowchart: https://drive.google.com/file/d/0B1qxfIcmRWOsV1JleHlyb0dBQm8
 
 Development trello: https://trello.com/b/YAlDCXr3/master-development
 
-The flowchart is always kept up to date with progress and is considered to be the live view of how the application functions.
-
 - Users and Authentication.
    - The users are divided into 2 catagories; normal and admin, with level values of 0 and 1 respectively. Normal members cannot access the editgroup.jsp, which can be seen in the flowchart. Note, the green in the flowchart corresponds to 'NO ACCOUNT' and not to normal members. Normal memebrs are reflected with blue coloring in the flowchart.
       - User permissions can be given on user creation by typing 'admin' into the access code field upon account creation.
@@ -61,21 +59,17 @@ The flowchart is always kept up to date with progress and is considered to be th
       - userid is also an int and will require being cast.
       
 - RESTful API.
-   - The following is a list of urls which are accessable. (FormParam) **Not JSON!**
-     - users/
-     - users/username/{username}
-     - users/userid/{userid}
-     - users/signin (username, password)
-     - users/signup (username, password, email, firstname, lastname, accesscode)
-     - notes/
-     - notes/addnote (username, title, note)
-     
-- Directory Structure.
-   - pages/ **Incorrect!**
-      - signin.jsp
-      - signup.jsp
-      - member/ (authfilter)
-         - addnote.jsp
-         - wall.jsp
-   - rest/
-      - member/ (suthfilter) **Unsure about usage with REST**
+   - The following is a list of urls which are accessable.
+     - notes (Get) -> Get notes -> Use uri encoded search term with value search. Eg ?search=%23cleaning (Note # has to be encoded as %23) -> Returns a List of Note objects - View appendix A1.
+     - notes (Post) -> Add note -> JSON Note object -> Returns status
+     - notes/complete/{id} (Put) -> Set note to completed -> Returns updated note
+     - notes/uncomplete/{id} (Put) -> Set note to uncompleted -> Returns updated note
+     - session (Get) -> Is signed in -> Returns status
+     - session (Post) -> Create user (Sign up) -> Returns status
+     - session (Put) -> Sign in -> Returns status
+     - session (Delete) -> Sign out -> Returns status
+
+- Appendix A
+   - 1 (Notes Get method)
+      - The notes get method returns a Json encoded list of Note objects. They are ordered in the following way.
+         - Uncompleted before Completed, and inside this division, they are ordered from high to low priority, and inside this division they are ordered by date, having the newest first.
