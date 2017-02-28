@@ -148,9 +148,9 @@
 						return a.sortOrder - b.sortOrder;
 					});
 					for (var i = 0; i < response.length; i++) {
-						if (response[i].note.includes('#highpriority')) {
+						if (response[i].note.indexOf('#highpriority') != -1) {
 							color = '#f07070';
-						} else if (response[i].note.includes('#lowpriority')) {
+						} else if (response[i].note.indexOf('#lowpriority') != -1) {
 							color = '#00d070';
 						} else {
 							color = '#00a0f0';
