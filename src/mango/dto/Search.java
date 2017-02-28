@@ -1,4 +1,4 @@
-package main.dto;
+package mango.dto;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;

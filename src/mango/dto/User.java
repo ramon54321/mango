@@ -1,7 +1,7 @@
-package main.dto;
+package mango.dto;
 
 import javax.persistence.*;
-import main.utilities.*;
+import mango.utilities.*;
 import javax.xml.bind.annotation.*;
 
 @XmlRootElement

@@ -1,6 +1,6 @@
-package main.utilities;
+package mango.utilities;
 import java.sql.*;
-import main.dto.*;
+import mango.dto.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;

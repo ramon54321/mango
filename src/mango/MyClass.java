@@ -1,4 +1,4 @@
-package main;
+package mango;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,9 +9,9 @@ import javax.servlet.ServletException;
 import java.sql.*;
 
 public class MyClass extends HttpServlet{
-	
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		
+
 		// Session - Not needed for DB, just for reference
 		HttpSession session = request.getSession();
 
@@ -46,7 +46,7 @@ public class MyClass extends HttpServlet{
 			rs.close();
 			stmt.close();
 			conn.close();
-			
+
 		} catch (Exception e) {e.printStackTrace();}
 	}
 

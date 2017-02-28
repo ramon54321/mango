@@ -1,4 +1,4 @@
-package main.websockets;
+package mango.websockets;
 
 import javax.websocket.*;
 import javax.websocket.server.*;
