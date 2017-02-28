@@ -17,6 +17,7 @@
 				width: 50%;
 				margin: 0px auto;
 				padding: 5px 10px 5px 10px;
+				box-sizing: border-box;
 			}
 			.menu {
 				border-radius: 10px;
@@ -33,6 +34,26 @@
 			.newNoteText {
 				width: 100%;
 				box-sizing: border-box;
+			}
+			.note {
+				width: 55%;
+				margin: 0px auto;
+				transform: translate(-4.545%, 0);
+				border-radius: 10px;
+				background-color: #00a0e0;
+				// background-color: #00e0a0;
+				// background-color: #e0a0a0;
+				cursor: pointer;
+			}
+			.note::after {
+				content: " ";
+				display: block;
+				clear: both;
+			}
+			.noteHeader, .noteBody {
+				width: 90%;
+				float: right;
+				cursor: default;
 			}
 			.noteHeader {
 				border-radius: 10px 10px 0px 0px;
@@ -130,8 +151,18 @@
 						return a.sortOrder - b.sortOrder;
 					});
 					for (var i = 0; i < response.length; i++) {
+						if (response[i].note.includes('#highpriority')) {
+							color = '#f07070';
+						} else if (response[i].note.includes('#lowpriority')) {
+							color = '#00d070';
+						} else {
+							color = '#00a0f0';
+						}
 						$('body').append(
-							'<div class="noteHeader">'
+							'<div class="note" style="background-color: '
+							+ color
+							+ '">'
+							+ '<div class="noteHeader">'
 							+ response[i].user.username
 							+ ' at '
 							+ response[i].dateCreated.substring(0, 10)
@@ -139,6 +170,8 @@
 							+ response[i].dateCreated.substring(11, 19)
 							+ '</div><div class="noteBody">'
 							+ response[i].note
+							+ '</div>'
+							+ '</div>'
 							+ '</div><div class="footer"></div>');
 					}
 				});
