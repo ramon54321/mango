@@ -1,8 +1,8 @@
-package main.resources;
+package mango.resources;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import main.dto.*;
+import mango.dto.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
@@ -10,13 +10,13 @@ import java.security.MessageDigest;
 import java.util.List;
 import java.util.ArrayList;
 import org.hibernate.Query;
-import main.utilities.*;
+import mango.utilities.*;
 import javax.ws.rs.core.*;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import main.websockets.*;
+import mango.websockets.*;
 
 @Path("notes/")
 public class Notes {

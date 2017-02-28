@@ -1,4 +1,4 @@
-package main.utilities;
+package mango.utilities;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
@@ -8,14 +8,14 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import java.sql.*;
-import main.dto.*;
+import mango.dto.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import java.security.MessageDigest;
 import java.util.List;
 import org.hibernate.Query;
-import main.utilities.*;
+import mango.utilities.*;
 
 public class DataServices {
 

@@ -1,7 +1,7 @@
-package main.dto;
+package mango.dto;
 
-import main.dto.*;
-import main.utilities.*;
+import mango.dto.*;
+import mango.utilities.*;
 
 public class UserSession {
   public boolean successfulLogin = false;
