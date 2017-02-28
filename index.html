@@ -118,7 +118,7 @@
 				}
 			}
 			function onPost() {
-				$.post('rest/notes/addnote', JSON.stringify({ note: $('.newNoteText').val() }), function() {
+				$.post('rest/notes', JSON.stringify({ note: $('.newNoteText').val() }), function() {
 					hideNewNote();
 					hideNotes();
 					showNotes();
@@ -204,20 +204,25 @@
 			}
 			function onSignIn() {
 				$('.signSuccess, .signFailure').remove();
-				$.post('rest/users/signin', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
-					if (response.status) {
-						hideSign();
-						showMenu();
-						showNotes();
-					} else {
-						$('.signBody').append('<div class="signFailure">Incorrect username or password!</div>');
+				$.ajax({
+					type: 'PUT',
+					url: 'rest/sessions',
+					data: JSON.stringify({ username: $('#username').val(), password: $('#password').val() }),
+					success: function(response) {
+						if (response.status) {
+							hideSign();
+							showMenu();
+							showNotes();
+						} else {
+							$('.signBody').append('<div class="signFailure">Incorrect username or password!</div>');
+						}
 					}
 				});
 			}
 			function onSignOut() {
 				$.ajax({
-					type: 'POST',
-					url: 'rest/users/signout',
+					type: 'DELETE',
+					url: 'rest/sessions',
 					async: false
 				});
 				hideMenu();
@@ -226,7 +231,7 @@
 			}
 			function onSignUp() {
 				$('.signSuccess, .signFailure').remove();
-				$.post('rest/users/signup', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
+				$.post('rest/users', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
 					if (response.status) {
 						$('.signBody').append('<div class="signSuccess">You have been signed up!</div>');
 					} else {
@@ -238,7 +243,7 @@
 				var a = false;
 				$.ajax({
 					type: 'GET',
-					url: 'rest/session/issignedin',
+					url: 'rest/sessions',
 					async: false,
 					success: function (response) {
 						a = response.status;
