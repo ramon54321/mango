@@ -60,14 +60,14 @@ Development trello: https://trello.com/b/YAlDCXr3/master-development
       
 - RESTful API.
    - The following is a list of urls which are accessable.
-     - notes (Get) -> Get notes -> Use uri encoded search term with value search. Eg ?search=%23cleaning (Note # has to be encoded as %23) -> Returns a List of Note objects - View appendix A1.
-     - notes (Post) -> Add note -> JSON Note object -> Returns status
-     - notes/complete/{id} (Put) -> Set note to completed -> Returns updated note
-     - notes/uncomplete/{id} (Put) -> Set note to uncompleted -> Returns updated note
-     - session (Get) -> Is signed in -> Returns status
-     - session (Put) -> Sign in -> Returns status
-     - session (Delete) -> Sign out -> Returns status
-     - user (Post) -> Create user (Sign up) -> Returns status
+     - notes (GET) -> Get notes -> Use uri encoded search term with value search. Eg ?search=%23cleaning (Note # has to be encoded as %23) -> Returns a List of Note objects - View appendix A1.
+     - notes (POST) -> Add note -> JSON Note object -> Returns status
+     - notes/complete/{id} (PUT) -> Set note to completed -> Returns updated note
+     - notes/uncomplete/{id} (PUT) -> Set note to uncompleted -> Returns updated note
+     - sessions (GET) -> Is signed in -> Returns status
+     - sessions (PUT) -> Sign in -> Returns status
+     - sessions (DELETE) -> Sign out -> Returns status
+     - user (POST) -> Sign up (create user) -> Returns status
 
 - Appendix A
    - 1 (Notes Get method)
