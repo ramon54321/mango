@@ -1,13 +1,13 @@
-package main.utilities;
+package main.dto;
 
 import main.dto.*;
 import main.utilities.*;
 
-public class UserSessionPOD {
+public class UserSession {
   public boolean successfulLogin = false;
   public User user = null;
 
-  public UserSessionPOD (boolean successfulLogin, User user){
+  public UserSession (boolean successfulLogin, User user){
     this.successfulLogin = successfulLogin;
     this.user = user;
   }

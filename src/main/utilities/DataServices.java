@@ -13,14 +13,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import java.security.MessageDigest;
-import main.dto.connections.*;
 import java.util.List;
 import org.hibernate.Query;
 import main.utilities.*;
 
 public class DataServices {
 
-  public static UserSessionPOD validateCredentials(String username, String password) {
+  public static UserSession validateCredentials(String username, String password) {
 
 		// Open session and get user from database given username
 		Session session = Hibernate.getSessionFactory().openSession();
@@ -37,7 +36,7 @@ public class DataServices {
 
 		// Ensure a user was found
 		if(results.size() < 1)
-			return new UserSessionPOD(false, null);
+			return new UserSession(false, null);
 
 		User retrievedUser = (User) results.get(0);
 		String expectedPassword = retrievedUser.getPassword();
@@ -48,9 +47,9 @@ public class DataServices {
 
 		// Compare passwords
 		if(givenPassword.equals(expectedPassword)){
-			return new UserSessionPOD(true, retrievedUser);
+			return new UserSession(true, retrievedUser);
 		} else {
-			return new UserSessionPOD(false, null);
+			return new UserSession(false, null);
 		}
 	}
 

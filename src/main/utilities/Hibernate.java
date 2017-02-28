@@ -1,4 +1,4 @@
-package main.dto.connections;
+package main.utilities;
 import java.sql.*;
 import main.dto.*;
 import org.hibernate.SessionFactory;
