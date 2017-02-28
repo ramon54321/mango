@@ -19,6 +19,9 @@ public class Note {
 	private boolean pinned = false;
 	private boolean completed = false;
 	private Date dateCreated;
+	@XmlElement
+	@Transient
+	public int sortOrder;
 
 	public Note(){
 

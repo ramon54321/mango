@@ -62,6 +62,12 @@ public class Notes {
 				query = session.createQuery(hql);
 				results.addAll((List<Note>) query.list());
 
+        int orderNumber = 0;
+        for(Note n : results){
+          n.sortOrder = orderNumber;
+          orderNumber++;
+        }
+
 				list = new GenericEntity<List<Note>>(results){};
 			}
 
