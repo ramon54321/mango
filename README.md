@@ -65,9 +65,9 @@ Development trello: https://trello.com/b/YAlDCXr3/master-development
      - notes/complete/{id} (Put) -> Set note to completed -> Returns updated note
      - notes/uncomplete/{id} (Put) -> Set note to uncompleted -> Returns updated note
      - session (Get) -> Is signed in -> Returns status
-     - session (Post) -> Create user (Sign up) -> Returns status
      - session (Put) -> Sign in -> Returns status
      - session (Delete) -> Sign out -> Returns status
+     - user (Post) -> Create user (Sign up) -> Returns status
 
 - Appendix A
    - 1 (Notes Get method)
