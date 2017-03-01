@@ -13,7 +13,7 @@
 			.footer {
 				height: 10px;
 			}
-			.menu, .newNote, .noteHeader, .noteBody {
+			.menu, .newNote, .noteHeader, .noteHeader2, .noteBody, .noteBody2 {
 				width: 49.875%;
 				margin: 0px auto;
 				padding: 5px 10px 5px 10px;
@@ -47,20 +47,26 @@
 				display: block;
 				clear: both;
 			}
-			.noteHeader, .noteBody {
+			.noteHeader, .noteHeader2, .noteBody, .noteBody2 {
 				width: 95%;
 				float: right;
 				cursor: default;
 			}
-			.noteHeader {
-				border-radius: 10px 10px 0px 0px;
+			.noteHeader, .noteHeader2 {
+				border-radius: 0px 10px 0px 0px;
 				font-size: 80%;
 				background-color: #f0f8ff;
 			}
-			.noteBody {
+			.noteHeader2 {
+				border-radius: 10px 10px 0px 0px;
+			}
+			.noteBody, .noteBody2 {
 				white-space: pre-wrap;
-				border-radius: 0px 0px 10px 10px;
+				border-radius: 0px 0px 10px 0px;
 				background-color: #ffffff;
+			}
+			.noteBody2 {
+				border-radius: 0px 0px 10px 10px;
 			}
 			.tag {
 				color: #00a0f0;
@@ -154,15 +160,19 @@
 					var currentDate = new Date().toISOString().substring(0, 10);
 					for (var i = 0; i < response.length; i++) {
 						if (response[i].completed) {
-							style = '';
+							noteStyle = '';
+							headerClass = 'noteHeader2';
+							bodyClass = 'noteBody2';
 						} else {
 							if (response[i].note.indexOf('#highpriority') != -1) {
-								style = 'style="background-color: #f07070;" ';
+								noteStyle = 'style="background-color: #f07070;" ';
 							} else if (response[i].note.indexOf('#lowpriority') != -1) {
-								style = 'style="background-color: #00d070;" ';
+								noteStyle = 'style="background-color: #00d070;" ';
 							} else {
-								style = 'style="background-color: #00a0f0;" ';
+								noteStyle = 'style="background-color: #00a0f0;" ';
 							}
+							headerClass = 'noteHeader';
+							bodyClass = 'noteBody';
 						}
 						if (response[i].dateCreated.substring(0, 10) === currentDate) {
 							date = response[i].dateCreated.substring(11, 16);
@@ -204,15 +214,20 @@
 						}
 						$('body').append(
 							'<div class="note" '
-							+ style
+							+ noteStyle
 							+ 'data-noteId="'
 							+ response[i].noteId
 							+ '">'
-							+ '<div class="noteHeader">'
+							+ '<div class="'
+							+ headerClass
+							+ '">'
 							+ response[i].user.username
 							+ ' at '
 							+ date
-							+ '</div><div class="noteBody">'
+							+ '</div>'
+							+ '<div class="'
+							+ bodyClass
+							+ '">'
 							+ note2
 							+ '</div>'
 							+ '</div>'
@@ -222,7 +237,7 @@
 				});
 			}
 			function hideNotes() {
-				$('.noteHeader, .noteBody').remove();
+				$('.noteHeader, .noteHeader2, .noteBody, .noteBody2').remove();
 				$('.footer').not('#menuFooter, #newNoteFooter').remove();
 			}
 			function onComplete() {
