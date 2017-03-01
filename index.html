@@ -62,6 +62,10 @@
 				border-radius: 0px 0px 10px 10px;
 				background-color: #ffffff;
 			}
+			.tag {
+				color: #00a0f0;
+				font-style: italic;
+			}
 			.sign {
 				width: 250px;
 				position: absolute;
@@ -167,6 +171,37 @@
 								+ ' '
 								+ response[i].dateCreated.substring(11, 16);
 						}
+						var note = response[i].note;
+						var note2 = '';
+						var k = 0;
+						var beg = -1;
+						var end = 0;
+						while (true) {
+							if (k == note.length) {
+								if (beg == -1) {
+									note2 += note.substring(end);
+								} else {
+									note2 +=
+										'<span class="tag">'
+										+ note.substring(beg)
+										+ '</span>';
+								}
+								break;
+							}
+							if (note[k] == '#') {
+								note2 += note.substring(end, k);
+								beg = k;
+							}
+							if (note[k] == ' ' && beg != -1) {
+								note2 +=
+									'<span class="tag">'
+									+ note.substring(beg, k)
+									+ '</span>';
+									beg = -1;
+									end = k;
+							}
+							k++;
+						}
 						$('body').append(
 							'<div class="note" '
 							+ style
@@ -178,7 +213,7 @@
 							+ ' at '
 							+ date
 							+ '</div><div class="noteBody">'
-							+ response[i].note
+							+ note2
 							+ '</div>'
 							+ '</div>'
 							+ '</div><div class="footer"></div>');
