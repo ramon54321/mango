@@ -21,6 +21,40 @@ import mango.websockets.*;
 @Path("notes/")
 public class Notes {
 
+	/***
+	 * Gets the note with the specified id.
+   * returns: the note.
+	 */
+  @GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Note notesId(@PathParam("id") String idin){
+
+		try {
+			int id = Integer.valueOf(String.valueOf(idin));
+
+			Session session = Hibernate.getSessionFactory().openSession();
+			session.beginTransaction();
+
+			String hql = "FROM Note WHERE noteId = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			List results = query.list();
+
+			System.out.println("List length: " + results.size());
+
+			Note retrievedNote = (Note) results.get(0);
+
+			session.getTransaction().commit();
+			session.close();
+
+			return retrievedNote;
+
+		} catch (Exception e){
+			return null;
+		}
+	}
+
   /***
 	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering.
    * returns: a list of all notes which matches the search criteria.
