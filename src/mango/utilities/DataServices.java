@@ -16,8 +16,31 @@ import java.security.MessageDigest;
 import java.util.List;
 import org.hibernate.Query;
 import mango.utilities.*;
+import java.nio.charset.Charset;
+import java.nio.ByteBuffer;
 
 public class DataServices {
+
+  public static String decode(String hex){
+
+    String[] list=hex.split("(?<=\\G.{2})");
+    ByteBuffer buffer= ByteBuffer.allocate(list.length);
+
+    System.out.println(list.length);
+
+    for(String str: list){
+      buffer.put(Byte.parseByte(str,16));
+    }
+
+    String text = null;
+    try{
+      text = new String(buffer.array(), "UTF-8");
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+
+    return text;
+  }
 
   public static UserSession validateCredentials(String username, String password) {
 
