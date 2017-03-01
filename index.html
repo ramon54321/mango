@@ -148,8 +148,9 @@
 						return a.sortOrder - b.sortOrder;
 					});
 					for (var i = 0; i < response.length; i++) {
-						var style;
-						if (!response[i].completed) {
+						if (response[i].completed) {
+							style = '';
+						} else {
 							if (response[i].note.indexOf('#highpriority') != -1) {
 								style = 'style="background-color: #f07070;" ';
 							} else if (response[i].note.indexOf('#lowpriority') != -1) {
