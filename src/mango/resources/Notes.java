@@ -134,12 +134,14 @@ public class Notes {
 			List results = query.list();
 
 			System.out.println("List length: " + results.size());
-			session.getTransaction().commit();
-			session.close();
 
 			Note retrievedNote = (Note) results.get(0);
 
 			retrievedNote.setCompleted(true);
+			session.save(retrievedNote);
+
+			session.getTransaction().commit();
+			session.close();
 
       WebsocketEndpoint.broadcast();
 
@@ -171,12 +173,14 @@ public class Notes {
 			List results = query.list();
 
 			System.out.println("List length: " + results.size());
-			session.getTransaction().commit();
-			session.close();
 
 			Note retrievedNote = (Note) results.get(0);
 
 			retrievedNote.setCompleted(false);
+			session.save(retrievedNote);
+
+			session.getTransaction().commit();
+			session.close();
 
       WebsocketEndpoint.broadcast();
 
