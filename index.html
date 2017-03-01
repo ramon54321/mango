@@ -250,6 +250,7 @@
 				$('.sign').remove();
 			}
 			function onSignIn() {
+				$('#submit').unbind('click');
 				$('.signSuccess, .signFailure').remove();
 				$.ajax({
 					type: 'PUT',
@@ -261,6 +262,7 @@
 							showMenu();
 							showNotes();
 						} else {
+							$('#submit').click(onSignIn);
 							$('.signBody').append('<div class="signFailure">Incorrect username or password!</div>');
 						}
 					}
@@ -278,11 +280,13 @@
 				showSign();
 			}
 			function onSignUp() {
+				$('#submit').unbind('click');
 				$('.signSuccess, .signFailure').remove();
 				$.post('rest/users', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
 					if (response.status) {
 						$('.signBody').append('<div class="signSuccess">You have been signed up!</div>');
 					} else {
+						$('#submit').click(onSignUp);
 						$('.signBody').append('<div class="signFailure">' + response.message + '</div>');
 					}
 				});
