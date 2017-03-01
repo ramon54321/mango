@@ -147,6 +147,7 @@
 					response.sort(function(a, b) {
 						return a.sortOrder - b.sortOrder;
 					});
+					var currentDate = new Date().toISOString().substring(0, 10);
 					for (var i = 0; i < response.length; i++) {
 						if (response[i].completed) {
 							style = '';
@@ -159,6 +160,13 @@
 								style = 'style="background-color: #00a0f0;" ';
 							}
 						}
+						if (response[i].dateCreated.substring(0, 10) === currentDate) {
+							date = response[i].dateCreated.substring(11, 16);
+						} else {
+							date = response[i].dateCreated.substring(0, 10)
+								+ ' '
+								+ response[i].dateCreated.substring(11, 16);
+						}
 						$('body').append(
 							'<div class="note" '
 							+ style
@@ -168,7 +176,7 @@
 							+ '<div class="noteHeader">'
 							+ response[i].user.username
 							+ ' at '
-							+ response[i].dateCreated.substring(11, 16)
+							+ date
 							+ '</div><div class="noteBody">'
 							+ response[i].note
 							+ '</div>'
