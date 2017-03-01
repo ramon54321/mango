@@ -148,16 +148,21 @@
 						return a.sortOrder - b.sortOrder;
 					});
 					for (var i = 0; i < response.length; i++) {
-						if (response[i].note.indexOf('#highpriority') != -1) {
-							color = '#f07070';
-						} else if (response[i].note.indexOf('#lowpriority') != -1) {
-							color = '#00d070';
-						} else {
-							color = '#00a0f0';
+						var style;
+						if (!response[i].completed) {
+							if (response[i].note.indexOf('#highpriority') != -1) {
+								style = 'style="background-color: #f07070;" ';
+							} else if (response[i].note.indexOf('#lowpriority') != -1) {
+								style = 'style="background-color: #00d070;" ';
+							} else {
+								style = 'style="background-color: #00a0f0;" ';
+							}
 						}
 						$('body').append(
-							'<div class="note" style="background-color: '
-							+ color
+							'<div class="note" '
+							+ style
+							+ 'data-noteId="'
+							+ response[i].noteId
 							+ '">'
 							+ '<div class="noteHeader">'
 							+ response[i].user.username
@@ -171,11 +176,22 @@
 							+ '</div>'
 							+ '</div><div class="footer"></div>');
 					}
+					$('.note').click(onComplete);
 				});
 			}
 			function hideNotes() {
 				$('.noteHeader, .noteBody').remove();
 				$('.footer').not('#menuFooter, #newNoteFooter').remove();
+			}
+			function onComplete() {
+				$.ajax({
+					type: 'PUT',
+					url: 'rest/notes/complete/' + $(this).attr('data-noteId'),
+					success: function() {
+						hideNotes();
+						showNotes();
+					}
+				});
 			}
 			function moveTabToFront(a, b) {
 				a.css('background-color', '#ffffff');
