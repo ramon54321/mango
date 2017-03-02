@@ -237,7 +237,7 @@
 				});
 			}
 			function hideNotes() {
-				$('.noteHeader, .noteHeader2, .noteBody, .noteBody2').remove();
+				$('.note, .noteHeader, .noteHeader2, .noteBody, .noteBody2').remove();
 				$('.footer').not('#menuFooter, #newNoteFooter').remove();
 			}
 			function onComplete() {
@@ -321,6 +321,10 @@
 							$('#submit').click(onSignIn);
 							$('.signBody').append('<div class="signFailure">Incorrect username or password!</div>');
 						}
+					},
+					error: function(xhr, textStatus, errorThrown) {
+						$('#submit').click(onSignIn);
+						$('.signBody').append('<div class="signFailure">' + errorThrown + '</div>');
 					}
 				});
 			}
