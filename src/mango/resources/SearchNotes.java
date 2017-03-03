@@ -30,7 +30,7 @@ public class SearchNotes {
   @Path("{search}")
 	public Response notesGet(@PathParam("search") String searchHex, @Context HttpServletRequest request){
 
-    String search = DataServices.decode(searchHex);
+    String search = searchHex;
 
     System.out.println("String search : " + search);
 
@@ -49,7 +49,7 @@ public class SearchNotes {
 
 			if(search != null){
 
-        String[] searchParts = search.split(" ");
+        String[] searchParts = search.split("\\+");
         String searchQuery = "";
         for(int i = 0; i < searchParts.length; i++){
           if(i > 0){
