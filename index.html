@@ -24,21 +24,31 @@
 					margin: 0 auto;
 				}
 			}
-			.menu, .newNote, .noteHeader, .noteBody {
-				padding: 5px 10px 5px 10px;
+			.menu, .menuSearchInput, .newNote, .noteHeader, .noteBody {
 				box-sizing: border-box;
 			}
-			.menu {
+			.menu, .newNote {
+				padding: 10px;
 				border-radius: 10px;
 				background-color: #f0f8ff;
+			}
+			.menu {
+				display: table;
+			}
+			.menuRow {
+				display: table-row;
 			}
 			.menuCommand {
-				margin-right: 15px;
+				display: table-cell;
+				white-space: nowrap;
+				padding-right: 15px;
 			}
-			.newNote {
-				padding: 10px 10px 5px 10px;
-				border-radius: 10px;
-				background-color: #f0f8ff;
+			.menuSearch {
+				display: table-cell;
+				width: 100%;
+			}
+			.menuSearchInput {
+				width: 100%;
 			}
 			.newNoteText {
 				width: 100%;
@@ -76,6 +86,9 @@
 			.noteEmpty {
 				width: 25px;
 			}
+			.noteHeader, .noteBody {
+				padding: 5px 10px 5px 10px;
+			}
 			.noteHeader {
 				border-radius: 0 10px 0 0;
 				font-size: 80%;
@@ -95,6 +108,7 @@
 			.tag {
 				color: #00a0f0;
 				font-style: italic;
+				cursor: pointer;
 			}
 			.sign {
 				width: 250px;
@@ -139,12 +153,20 @@
 			function showMenu() {
 				$('body').append(
 					'<div class="menu">'
-					+ '<a id="commandNew" class="menuCommand" href="javascript:void(0)">New</a>'
-					+ '<a id="commandSignOut" class="menuCommand" href="javascript:void(0)">Sign out</a>'
+					+ '<div class="menuRow">'
+					+ '<div class="menuCommand"><a id="commandNew" href="javascript:void(0)">New</a></div>'
+					+ '<div class="menuCommand"><a id="commandSignOut" href="javascript:void(0)">Sign out</a></div>'
+					+ '<div class="menuSearch"><input class="menuSearchInput" type="text" placeholder="Search"></div>'
+					+ '</div>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
 				$('#commandNew').click(onNew);
 				$('#commandSignOut').click(onSignOut);
+				$('.menuSearchInput').keypress(function (event) {
+					if (event.which == 13) {
+						onSearch();
+					}
+				});
 			}
 			function hideMenu() {
 				$('.menu, #menuFooter').remove();
@@ -176,7 +198,11 @@
 					showNotes();
 				});
 			}
-			
+			function onSearch() {
+				$.get('rest/searchnotes/' + $('.menuSearchInput').val(), function (response) {
+					showNotesImpl(response);
+				});
+			}
 			function getLocaleDate() {
 				d = new Date();
 				s = d.getFullYear();
@@ -192,106 +218,110 @@
 				s += d.getDate();
 				return s;
 			}
-			function showNotes() {
-				$.get('rest/notes', function (response) {
-					response.sort(function(a, b) {
-						return a.sortOrder - b.sortOrder;
-					});
-					var currentDate = getLocaleDate();
-					for (var i = 0; i < response.length; i++) {
-						if (response[i].completed) {
-							stripeClass = '';
-							headerClass = 'noteHeader noteHeaderRound';
-							bodyClass = 'noteBody noteBodyRound';
+			function showNotesImpl(notes) {
+				notes.sort(function(a, b) {
+					return a.sortOrder - b.sortOrder;
+				});
+				var currentDate = getLocaleDate();
+				for (var i = 0; i < notes.length; i++) {
+					if (notes[i].completed) {
+						stripeClass = '';
+						headerClass = 'noteHeader noteHeaderRound';
+						bodyClass = 'noteBody noteBodyRound';
+					} else {
+						if (notes[i].note.indexOf('#highpriority') != -1) {
+							stripeClass = 'noteStripe noteRed';
+						} else if (notes[i].note.indexOf('#lowpriority') != -1) {
+							stripeClass = 'noteStripe noteGreen';
 						} else {
-							if (response[i].note.indexOf('#highpriority') != -1) {
-								stripeClass = 'noteStripe noteRed';
-							} else if (response[i].note.indexOf('#lowpriority') != -1) {
-								stripeClass = 'noteStripe noteGreen';
+							stripeClass = 'noteStripe noteBlue';
+						}
+						headerClass = 'noteHeader';
+						bodyClass = 'noteBody';
+					}
+					if (notes[i].dateCreated.substring(0, 10) === currentDate) {
+						date = notes[i].dateCreated.substring(11, 16);
+					} else {
+						date = notes[i].dateCreated.substring(0, 10)
+							+ ' '
+							+ notes[i].dateCreated.substring(11, 16);
+					}
+					var text = notes[i].note;
+					var text2 = '';
+					var k = 0;
+					var beg = -1;
+					var end = 0;
+					while (true) {
+						if (k == text.length) {
+							if (beg == -1) {
+								text2 += text.substring(end);
 							} else {
-								stripeClass = 'noteStripe noteBlue';
-							}
-							headerClass = 'noteHeader';
-							bodyClass = 'noteBody';
-						}
-						if (response[i].dateCreated.substring(0, 10) === currentDate) {
-							date = response[i].dateCreated.substring(11, 16);
-						} else {
-							date = response[i].dateCreated.substring(0, 10)
-								+ ' '
-								+ response[i].dateCreated.substring(11, 16);
-						}
-						var text = response[i].note;
-						var text2 = '';
-						var k = 0;
-						var beg = -1;
-						var end = 0;
-						while (true) {
-							if (k == text.length) {
-								if (beg == -1) {
-									text2 += text.substring(end);
-								} else {
-									text2 +=
-										'<span class="tag">'
-										+ text.substring(beg)
-										+ '</span>';
-								}
-								break;
-							}
-							if (text[k] == '#') {
-								text2 += text.substring(end, k);
-								beg = k;
-							}
-							if (text[k] == ' ' && beg != -1) {
 								text2 +=
 									'<span class="tag">'
-									+ text.substring(beg, k)
+									+ text.substring(beg)
 									+ '</span>';
-									beg = -1;
-									end = k;
 							}
-							k++;
+							break;
 						}
-						var note =
-							'<div class="note" data-noteId="'
-							+ response[i].noteId
-							+ '">'
-							+ '<div class="noteRow">';
-						if (stripeClass) {
-							note +=
-							'<div class="'
-							+ stripeClass
-							+ '">'
-							+ '</div>';
+						if (text[k] == '#') {
+							text2 += text.substring(end, k);
+							beg = k;
 						}
-						note +=
-							'<div class="'
-							+ headerClass
-							+ '">'
-							+ response[i].user.username
-							+ ' at '
-							+ date
-							+ '</div>'
-							+ '</div>'
-							+ '<div class="noteRow">';
-						if (stripeClass) {
-							note +=
-							'<div class="noteEmpty">'
-							+ '</div>';
+						if (text[k] == ' ' && beg != -1) {
+							text2 +=
+								'<span class="tag">'
+								+ text.substring(beg, k)
+								+ '</span>';
+								beg = -1;
+								end = k;
 						}
-						note +=
-							'<div class="'
-							+ bodyClass
-							+ '">'
-							+ text2
-							+ '</div>'
-							+ '</div>'
-							+ '</div>'
-							+ '<div class="footer">'
-							+ '</div>';
-						$('body').append(note);
+						k++;
 					}
-					$('.noteRed, .noteBlue, .noteGreen').click(onComplete);
+					var note =
+						'<div class="note" data-noteId="'
+						+ notes[i].noteId
+						+ '">'
+						+ '<div class="noteRow">';
+					if (stripeClass) {
+						note +=
+						'<div class="'
+						+ stripeClass
+						+ '">'
+						+ '</div>';
+					}
+					note +=
+						'<div class="'
+						+ headerClass
+						+ '">'
+						+ notes[i].user.username
+						+ ' at '
+						+ date
+						+ '</div>'
+						+ '</div>'
+						+ '<div class="noteRow">';
+					if (stripeClass) {
+						note +=
+						'<div class="noteEmpty">'
+						+ '</div>';
+					}
+					note +=
+						'<div class="'
+						+ bodyClass
+						+ '">'
+						+ text2
+						+ '</div>'
+						+ '</div>'
+						+ '</div>'
+						+ '<div class="footer">'
+						+ '</div>';
+					$('body').append(note);
+				}
+				$('.noteRed, .noteBlue, .noteGreen').click(onComplete);
+				$('.tag').click(onTag);
+			}
+			function showNotes() {
+				$.get('rest/notes', function (response) {
+					showNotesImpl(response);
 				});
 			}
 			function hideNotes() {
@@ -307,6 +337,14 @@
 						showNotes();
 					}
 				});
+			}
+			function onTag() {
+				v = $('.menuSearchInput').val();
+				if (v) {
+					v += ' ';
+				}
+				v += $(this).text();
+				$('.menuSearchInput').val(v);
 			}
 			function moveTabToFront(a, b) {
 				a.css('background-color', '#ffffff');
