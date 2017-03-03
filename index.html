@@ -13,9 +13,11 @@
 			.footer {
 				height: 10px;
 			}
-			.menu, .newNote, .noteHeader, .noteHeader2, .noteBody, .noteBody2 {
-				width: 49.875%;
-				margin: 0px auto;
+			.menu, .newNote, .note {
+				width: 50%;
+				margin: 0 auto;
+			}
+			.menu, .newNote, .noteHeader, .noteBody {
 				padding: 5px 10px 5px 10px;
 				box-sizing: border-box;
 			}
@@ -36,36 +38,51 @@
 				box-sizing: border-box;
 			}
 			.note {
-				width: 52.5%;
-				margin: 0px auto;
-				transform: translate(-2.5%, 0);
-				border-radius: 10px;
+				display: table;
+				position: relative;
+			}
+			.noteRow {
+				display: table-row;
+			}
+			.noteStripe, .noteEmpty, .noteHeader, .noteBody {
+				display: table-cell;
+			}
+			.noteStripe {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				width: 25px;
+				border-radius: 10px 0 0 10px;
+			}
+			.noteRed, .noteBlue, .noteGreen {
 				cursor: pointer;
 			}
-			.note::after {
-				content: " ";
-				display: block;
-				clear: both;
+			.noteRed {
+				background-color: #f07070;
 			}
-			.noteHeader, .noteHeader2, .noteBody, .noteBody2 {
-				width: 95%;
-				float: right;
-				cursor: default;
+			.noteBlue {
+				background-color: #00a0f0;
 			}
-			.noteHeader, .noteHeader2 {
-				border-radius: 0px 10px 0px 0px;
+			.noteGreen {
+				background-color: #00d070;
+			}
+			.noteEmpty {
+				width: 25px;
+			}
+			.noteHeader {
+				border-radius: 0 10px 0 0;
 				font-size: 80%;
 				background-color: #f0f8ff;
 			}
-			.noteHeader2 {
-				border-radius: 10px 10px 0px 0px;
+			.noteHeaderRound {
+				border-radius: 10px 10px 0 0;
 			}
-			.noteBody, .noteBody2 {
+			.noteBody {
 				white-space: pre-wrap;
-				border-radius: 0px 0px 10px 0px;
+				border-radius: 0 0 10px 0;
 				background-color: #ffffff;
 			}
-			.noteBody2 {
+			.noteBodyRound {
 				border-radius: 0px 0px 10px 10px;
 			}
 			.tag {
@@ -88,7 +105,7 @@
 				width: 100%;
 			}
 			.signHeader, .signLeftTab, .signRightTab {
-				border-radius: 20px 20px 0px 0px;
+				border-radius: 20px 20px 0 0;
 				background-color: #e0f0ff;
 			}
 			.signLeftTab, .signRightTab {
@@ -160,16 +177,16 @@
 					var currentDate = new Date().toISOString().substring(0, 10);
 					for (var i = 0; i < response.length; i++) {
 						if (response[i].completed) {
-							noteStyle = '';
-							headerClass = 'noteHeader2';
-							bodyClass = 'noteBody2';
+							stripeClass = '';
+							headerClass = 'noteHeader noteHeaderRound';
+							bodyClass = 'noteBody noteBodyRound';
 						} else {
 							if (response[i].note.indexOf('#highpriority') != -1) {
-								noteStyle = 'style="background-color: #f07070;" ';
+								stripeClass = 'noteStripe noteRed';
 							} else if (response[i].note.indexOf('#lowpriority') != -1) {
-								noteStyle = 'style="background-color: #00d070;" ';
+								stripeClass = 'noteStripe noteGreen';
 							} else {
-								noteStyle = 'style="background-color: #00a0f0;" ';
+								stripeClass = 'noteStripe noteBlue';
 							}
 							headerClass = 'noteHeader';
 							bodyClass = 'noteBody';
@@ -181,59 +198,77 @@
 								+ ' '
 								+ response[i].dateCreated.substring(11, 16);
 						}
-						var note = response[i].note;
-						var note2 = '';
+						var text = response[i].note;
+						var text2 = '';
 						var k = 0;
 						var beg = -1;
 						var end = 0;
 						while (true) {
-							if (k == note.length) {
+							if (k == text.length) {
 								if (beg == -1) {
-									note2 += note.substring(end);
+									text2 += text.substring(end);
 								} else {
-									note2 +=
+									text2 +=
 										'<span class="tag">'
-										+ note.substring(beg)
+										+ text.substring(beg)
 										+ '</span>';
 								}
 								break;
 							}
-							if (note[k] == '#') {
-								note2 += note.substring(end, k);
+							if (text[k] == '#') {
+								text2 += text.substring(end, k);
 								beg = k;
 							}
-							if (note[k] == ' ' && beg != -1) {
-								note2 +=
+							if (text[k] == ' ' && beg != -1) {
+								text2 +=
 									'<span class="tag">'
-									+ note.substring(beg, k)
+									+ text.substring(beg, k)
 									+ '</span>';
 									beg = -1;
 									end = k;
 							}
 							k++;
 						}
-						$('body').append(
-							'<div class="note" '
-							+ noteStyle
-							+ 'data-noteId="'
+						var note =
+							'<div class="note" data-noteId="'
 							+ response[i].noteId
 							+ '">'
-							+ '<div class="'
+							+ '<div class="noteRow">';
+						if (stripeClass) {
+							note +=
+							'<div class="'
+							+ stripeClass
+							+ '">'
+							+ '</div>';
+						}
+						note +=
+							'<div class="'
 							+ headerClass
 							+ '">'
 							+ response[i].user.username
 							+ ' at '
 							+ date
 							+ '</div>'
-							+ '<div class="'
+							+ '</div>'
+							+ '<div class="noteRow">';
+						if (stripeClass) {
+							note +=
+							'<div class="noteEmpty">';
+							+ '</div>';
+						}
+						note +=
+							'<div class="'
 							+ bodyClass
 							+ '">'
-							+ note2
+							+ text2
 							+ '</div>'
 							+ '</div>'
-							+ '</div><div class="footer"></div>');
+							+ '</div>'
+							+ '<div class="footer">'
+							+ '</div>';
+						$('body').append(note);
 					}
-					$('.note').click(onComplete);
+					$('.noteRed, .noteBlue, .noteGreen').click(onComplete);
 				});
 			}
 			function hideNotes() {
@@ -243,7 +278,7 @@
 			function onComplete() {
 				$.ajax({
 					type: 'PUT',
-					url: 'rest/notes/complete/' + $(this).attr('data-noteId'),
+					url: 'rest/notes/complete/' + $(this).parent().parent().attr('data-noteId'),
 					success: function() {
 						hideNotes();
 						showNotes();
