@@ -169,12 +169,28 @@
 					showNotes();
 				});
 			}
+			
+			function getLocaleDate() {
+				d = new Date();
+				s = d.getFullYear();
+				s += '-';
+				if (d.getMonth() + 1 < 10) {
+					s += '0';
+				}
+				s += d.getMonth() + 1;
+				s += '-';
+				if (d.getDate() < 10) {
+					s += '0';
+				}
+				s += d.getDate();
+				return s;
+			}
 			function showNotes() {
 				$.get('rest/notes', function (response) {
 					response.sort(function(a, b) {
 						return a.sortOrder - b.sortOrder;
 					});
-					var currentDate = new Date().toISOString().substring(0, 10);
+					var currentDate = getLocaleDate();
 					for (var i = 0; i < response.length; i++) {
 						if (response[i].completed) {
 							stripeClass = '';
