@@ -11,6 +11,7 @@
 			}
 			a {
 				text-decoration: none;
+				color: #3498db;
 			}
 			.footer {
 				height: 10px;
@@ -78,14 +79,20 @@
 				transition: 0.5s;
 				-webkit-transition: 0.5s;
 			}
-			.noteRed:hover, .noteBlue:hover, .noteGreen:hover {
-				background-color: #2C3E50;
+			.noteRed:hover {
+				background-color: #c0392b;
+			}
+			.noteBlue:hover {
+				background-color: #2980b9;
+			}
+			.noteGreen:hover {
+				background-color: #27ae60;
 			}
 			.noteRed {
-				background-color: #f07070;
+				background-color: #e74c3c;
 			}
 			.noteBlue {
-				background-color: #00a0f0;
+				background-color: #3498db;
 			}
 			.noteGreen {
 				background-color: #00d070;
@@ -114,7 +121,7 @@
 				border-radius: 0px 0px 10px 10px;
 			}
 			.tag {
-				color: #00a0f0;
+				color: #3498db;
 				font-style: italic;
 				cursor: pointer;
 			}
@@ -152,11 +159,28 @@
 			.signItem, .signSuccess, .signFailure, .signLoading {
 				padding: 10px;
 			}
+			.signItemTall {
+				padding-top: 20px;
+				padding-bottom: 15px;
+			}
 			.signFailure {
-				color: red;
+				color: #e74c3c;
 			}
 			.signLoading {
-				color: #00a0f0;
+				color: #3498db;
+			}
+			#submit {
+				padding: 6px;
+				padding-left: 12px;
+				padding-right: 12px; 
+				border-radius: 5px;
+				background-color: #3498db;
+				color: #ffffff;
+				transition: 0.5s;
+				-webkit-transition: 0.5s;
+			}
+			#submit:hover {
+				background-color: #34495e;
 			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
@@ -410,7 +434,7 @@
 					+ '<div class="signItem">'
 					+ '<input id="password" class="signInput" type="password" placeholder="Password">'
 					+ '</div>'
-					+ '<div class="signItem">'
+					+ '<div class="signItem signItemTall">'
 					+ '<a id="submit" class="command" href="javascript:void(0)">Submit</a>'
 					+ '</div>'
 					+ '</div>'
