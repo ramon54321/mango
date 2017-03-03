@@ -199,10 +199,18 @@
 				});
 			}
 			function onSearch() {
-				$.get('rest/searchnotes/' + $('.menuSearchInput').val(), function (response) {
-					hideNotes();
-					showNotesImpl(response);
-				});
+				searchString = $('.menuSearchInput').val().replace(/#/g, '');
+				if (searchString) {
+					$.get('rest/searchnotes/' + searchString, function (response) {
+						hideNotes();
+						showNotesImpl(response);
+					});
+				} else {
+					$.get('rest/notes/', function (response) {
+						hideNotes();
+						showNotesImpl(response);
+					});
+				}
 			}
 			function getLocaleDate() {
 				d = new Date();
