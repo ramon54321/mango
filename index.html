@@ -13,9 +13,16 @@
 			.footer {
 				height: 10px;
 			}
-			.menu, .newNote, .note {
-				width: 50%;
-				margin: 0 auto;
+			@media all and (max-width: 750px) {
+				.menu, .newNote, .note {
+					width: 100%;
+				}
+			}
+			@media all and (min-width: 751px) {
+				.menu, .newNote, .note {
+					width: 700px;
+					margin: 0 auto;
+				}
 			}
 			.menu, .newNote, .noteHeader, .noteBody {
 				padding: 5px 10px 5px 10px;
