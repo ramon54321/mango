@@ -75,6 +75,11 @@
 			}
 			.noteRed, .noteBlue, .noteGreen {
 				cursor: pointer;
+				transition: 0.5s;
+				-webkit-transition: 0.5s;
+			}
+			.noteRed:hover, .noteBlue:hover, .noteGreen:hover {
+				background-color: #2C3E50;
 			}
 			.noteRed {
 				background-color: #f07070;
@@ -103,6 +108,7 @@
 				white-space: pre-wrap;
 				border-radius: 0 0 10px 0;
 				background-color: #ffffff;
+				font-size: 10pt;
 			}
 			.noteBodyRound {
 				border-radius: 0px 0px 10px 10px;
