@@ -371,7 +371,7 @@
 					}
 				});
 				$('#submit').unbind('click').click(b);
-				$('.signSuccess, .signFailure').remove();
+				$('.signLoading, .signSuccess, .signFailure').remove();
 			}
 			function moveTabToBack(a, b) {
 				a.css('background-color', '#e0f0ff');
@@ -417,7 +417,7 @@
 			}
 			function onSignIn() {
 				$('#submit').unbind('click');
-				$('.signSuccess, .signFailure').remove();
+				$('.signLoading, signSuccess, .signFailure').remove();
 				$('.signBody').append('<div class="signLoading">Signing in...</div>');
 				$.ajax({
 					type: 'PUT',
@@ -454,7 +454,8 @@
 			}
 			function onSignUp() {
 				$('#submit').unbind('click');
-				$('.signSuccess, .signFailure').remove();
+				$('.signLoading, signSuccess, .signFailure').remove();
+				$('.signBody').append('<div class="signLoading">Signing up...</div>');
 				$.post('rest/users', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
 					if (response.status) {
 						$('.signBody').append('<div class="signSuccess">You have been signed up!</div>');
