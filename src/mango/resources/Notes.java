@@ -158,7 +158,7 @@ public class Notes {
   @PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("complete/{id}")
-	public Note notesComplete(@PathParam("id") String idin){
+	public Note notesComplete(@PathParam("id") String idin, @Context HttpServletRequest request){
 
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
@@ -176,6 +176,8 @@ public class Notes {
 			Note retrievedNote = (Note) results.get(0);
 
 			retrievedNote.setCompleted(true);
+			retrievedNote.setDateCompletedCurrent();
+			retrievedNote.setUserCompleted(DataServices.getSignedInUser(request));
 			session.save(retrievedNote);
 
 			session.getTransaction().commit();
