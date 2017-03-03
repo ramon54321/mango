@@ -20,6 +20,7 @@ public class Note {
 	private boolean completed = false;
 	private Date dateCreated;
 	private Date dateCompleted;
+	@OneToOne
 	private User userCompleted;
 	@XmlElement
 	@Transient
