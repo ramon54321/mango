@@ -247,7 +247,7 @@
 					});
 				}
 			}
-			function getLocaleDate() {
+			function getLocalDate() {
 				d = new Date();
 				s = d.getFullYear();
 				s += '-';
@@ -262,11 +262,21 @@
 				s += d.getDate();
 				return s;
 			}
+			function getTimeOrDate(date, currentDate) {
+				if (date.substring(0, 10) === currentDate) {
+					date = date.substring(11, 16);
+				} else {
+					date = date.substring(0, 10)
+						+ ' '
+						+ date.substring(11, 16);
+				}
+				return date;
+			}
 			function showNotesImpl(notes) {
 				notes.sort(function(a, b) {
 					return a.sortOrder - b.sortOrder;
 				});
-				var currentDate = getLocaleDate();
+				currentDate = getLocalDate();
 				for (var i = 0; i < notes.length; i++) {
 					if (notes[i].completed) {
 						stripeClass = '';
@@ -283,12 +293,21 @@
 						headerClass = 'noteHeader';
 						bodyClass = 'noteBody';
 					}
-					if (notes[i].dateCreated.substring(0, 10) === currentDate) {
-						date = notes[i].dateCreated.substring(11, 16);
+					if (notes[i].completed) {
+						header =
+							'Posted by '
+							+ notes[i].user.username
+							+ ' at '
+							+ getTimeOrDate(notes[i].dateCreated, currentDate)
+							+ '; completed by '
+							+ notes[i].userCompleted.username
+							+ ' at '
+							+ getTimeOrDate(notes[i].dateCompleted, currentDate);
 					} else {
-						date = notes[i].dateCreated.substring(0, 10)
-							+ ' '
-							+ notes[i].dateCreated.substring(11, 16);
+						header =
+							notes[i].user.username
+							+ ' at '
+							+ getTimeOrDate(notes[i].dateCreated, currentDate);
 					}
 					var text = notes[i].note;
 					var text2 = '';
@@ -337,9 +356,7 @@
 						'<div class="'
 						+ headerClass
 						+ '">'
-						+ notes[i].user.username
-						+ ' at '
-						+ date
+						+ header
 						+ '</div>'
 						+ '</div>'
 						+ '<div class="noteRow">';
