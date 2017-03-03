@@ -19,6 +19,8 @@ public class Note {
 	private boolean pinned = false;
 	private boolean completed = false;
 	private Date dateCreated;
+	private Date dateCompleted;
+	private User userCompleted;
 	@XmlElement
 	@Transient
 	public int sortOrder;
@@ -34,6 +36,28 @@ public class Note {
 		this.completed = completed;
 		this.isTask = isTask;
 		this.pinned = pinned;
+	}
+
+	public void setUserCompleted(User userCompleted){
+		this.userCompleted = userCompleted;
+	}
+
+	@XmlElement
+	public User getUserCompleted(){
+		return this.userCompleted;
+	}
+
+	public void setDateCompleted(Date dateCompleted){
+		this.dateCompleted = dateCompleted;
+	}
+
+	public void setDateCompletedCurrent(){
+		this.dateCompleted = new Date();
+	}
+
+	@XmlElement
+	public Date getDateCompleted(){
+		return this.dateCompleted;
 	}
 
 	public void setDateCreated(Date dateCreated){
