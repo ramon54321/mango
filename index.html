@@ -200,6 +200,7 @@
 			}
 			function onSearch() {
 				$.get('rest/searchnotes/' + $('.menuSearchInput').val(), function (response) {
+					hideNotes();
 					showNotesImpl(response);
 				});
 			}
