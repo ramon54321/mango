@@ -47,54 +47,42 @@ public class SearchNotes {
 			List<Note> results = new ArrayList();
 			GenericEntity<List<Note>> list = null;
 
-			if(search != null){
-
-        String[] searchParts = search.split("\\+");
-        String searchQuery = "";
-        for(int i = 0; i < searchParts.length; i++){
-          if(i > 0){
-            searchQuery += " and";
-          }
-          searchQuery += " note like '%" + searchParts[i] + "%'";
-        }
-
-				hql = "FROM Note WHERE" + searchQuery;
-        System.out.println("Search HQL: " + hql);
-        query = session.createQuery(hql);
-				results.addAll((List<Note>) query.list());
-
-        int orderNumber = 0;
-        for(Note n : results){
-          n.sortOrder = orderNumber;
-          orderNumber++;
-        }
-
-				list = new GenericEntity<List<Note>>(results){};
-			} else {
-				hql = "FROM Note WHERE note like '%#highpriority%' and completed = false order by dateCreated desc";
-				query = session.createQuery(hql);
-				results.addAll((List<Note>) query.list());
-
-				hql = "FROM Note WHERE note not like '%#highpriority%' and note not like '%#lowpriority%' and completed = false order by dateCreated desc";
-				query = session.createQuery(hql);
-				results.addAll((List<Note>) query.list());
-
-				hql = "FROM Note WHERE note like '%#lowpriority%' and note not like '%#highpriority%' and completed = false order by dateCreated desc";
-				query = session.createQuery(hql);
-				results.addAll((List<Note>) query.list());
-
-				hql = "FROM Note WHERE completed = true order by dateCreated desc";
-				query = session.createQuery(hql);
-				results.addAll((List<Note>) query.list());
-
-        int orderNumber = 0;
-        for(Note n : results){
-          n.sortOrder = orderNumber;
-          orderNumber++;
-        }
-
-				list = new GenericEntity<List<Note>>(results){};
+			String[] searchParts = search.split("\\+");
+			String searchQuery = "";
+			for(int i = 0; i < searchParts.length; i++){
+				if(i > 0){
+					searchQuery += " and";
+				}
+				searchQuery += " note like '%" + searchParts[i] + "%'";
 			}
+
+			hql = "FROM Note WHERE" + searchQuery + " and note like '%#highpriority%' and completed = false order by dateCreated desc";
+			System.out.println("Search HQL: " + hql);
+			query = session.createQuery(hql);
+			results.addAll((List<Note>) query.list());
+
+			hql = "FROM Note WHERE" + searchQuery + " and note not like '%#highpriority%' and note not like '%#lowpriority%' and completed = false order by dateCreated desc";
+			System.out.println("Search HQL: " + hql);
+			query = session.createQuery(hql);
+			results.addAll((List<Note>) query.list());
+
+			hql = "FROM Note WHERE" + searchQuery + " and note like '%#lowpriority%' and note not like '%#highpriority%' and completed = false order by dateCreated desc";
+			System.out.println("Search HQL: " + hql);
+			query = session.createQuery(hql);
+			results.addAll((List<Note>) query.list());
+
+			hql = "FROM Note WHERE" + searchQuery + " and completed = true order by dateCreated desc";
+			System.out.println("Search HQL: " + hql);
+			query = session.createQuery(hql);
+			results.addAll((List<Note>) query.list());
+
+			int orderNumber = 0;
+			for(Note n : results){
+				n.sortOrder = orderNumber;
+				orderNumber++;
+			}
+
+			list = new GenericEntity<List<Note>>(results){};
 
 			session.getTransaction().commit();
 			session.close();
