@@ -138,10 +138,10 @@
 				border-radius: 20px;
 				background-color: #ffffff;
 			}
-			.signHeader, .signLeftTab, .signRightTab, .signBody, .signItem, .signInput {
+			.signHeader, .signLeftTab, .signRightTab, .signBody, .signItem, .signInput, .signSubmit {
 				box-sizing: border-box;
 			}
-			.signHeader, .signItem, .signInput {
+			.signHeader, .signItem, .signInput, .signSubmit {
 				width: 100%;
 			}
 			.signHeader, .signLeftTab, .signRightTab {
@@ -163,17 +163,14 @@
 			.signItem, .signSuccess, .signFailure, .signLoading {
 				padding: 10px;
 			}
-			.signItemTall {
-				padding-top: 20px;
-				padding-bottom: 15px;
-			}
 			.signFailure {
 				color: #e74c3c;
 			}
 			.signLoading {
 				color: #3498db;
 			}
-			#submit {
+			.signSubmit {
+				display: inline-block;
 				padding: 6px;
 				padding-left: 12px;
 				padding-right: 12px; 
@@ -183,7 +180,7 @@
 				transition: 0.5s;
 				-webkit-transition: 0.5s;
 			}
-			#submit:hover {
+			.signSubmit:hover {
 				background-color: #34495e;
 			}
 		</style>
@@ -423,7 +420,7 @@
 						b();
 					}
 				});
-				$('#submit').unbind('click').click(b);
+				$('.signSubmit').unbind('click').click(b);
 				$('.signLoading, .signSuccess, .signFailure').remove();
 			}
 			function moveTabToBack(a, b) {
@@ -457,8 +454,8 @@
 					+ '<div class="signItem">'
 					+ '<input id="password" class="signInput" type="password" placeholder="Password">'
 					+ '</div>'
-					+ '<div class="signItem signItemTall">'
-					+ '<a id="submit" class="command" href="javascript:void(0)">Submit</a>'
+					+ '<div class="signItem">'
+					+ '<a class="signSubmit" href="javascript:void(0)">Submit</a>'
 					+ '</div>'
 					+ '</div>'
 					+ '</div>');
@@ -469,7 +466,7 @@
 				$('.sign').remove();
 			}
 			function onSignIn() {
-				$('#submit').unbind('click');
+				$('.signSubmit').unbind('click');
 				$('.signLoading, signSuccess, .signFailure').remove();
 				$('.signBody').append('<div class="signLoading">Signing in...</div>');
 				$.ajax({
@@ -482,13 +479,13 @@
 							showMenu();
 							showNotes();
 						} else {
-							$('#submit').click(onSignIn);
+							$('.signSubmit').click(onSignIn);
 							$('.signLoading').remove();
 							$('.signBody').append('<div class="signFailure">Incorrect username or password!</div>');
 						}
 					},
 					error: function(xhr, textStatus, errorThrown) {
-						$('#submit').click(onSignIn);
+						$('.signSubmit').click(onSignIn);
 						$('.signLoading').remove();
 						$('.signBody').append('<div class="signFailure">' + errorThrown + '</div>');
 					}
@@ -506,7 +503,7 @@
 				showSign();
 			}
 			function onSignUp() {
-				$('#submit').unbind('click');
+				$('.signSubmit').unbind('click');
 				$('.signLoading, signSuccess, .signFailure').remove();
 				$('.signBody').append('<div class="signLoading">Signing up...</div>');
 				$.post('rest/users', JSON.stringify({ username: $('#username').val(), password: $('#password').val() }), function(response) {
@@ -514,7 +511,7 @@
 						$('.signLoading').remove();
 						$('.signBody').append('<div class="signSuccess">You have been signed up!</div>');
 					} else {
-						$('#submit').click(onSignUp);
+						$('.signSubmit').click(onSignUp);
 						$('.signLoading').remove();
 						$('.signBody').append('<div class="signFailure">' + response.message + '</div>');
 					}
