@@ -5,12 +5,20 @@
 		<title>Mango</title>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 		<style>
+			html {
+				overflow: hidden;
+    			height: 100%;
+			}
 			body {
 				font-family: 'Open Sans', sans-serif;
 				background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./test2.jpg');
 				background-size: cover;
 				background-repeat: no-repeat;
     			background-attachment: fixed;
+				height: 100%;
+    			overflow: auto;
+				margin: 0px;
+				padding-top: 5px;
 			}
 			a {
 				text-decoration: none;
@@ -36,7 +44,7 @@
 			.menu, .newNote {
 				padding: 10px;
 				border-radius: 10px;
-				background-color: #E4F1FE;
+				background-color: rgba(220, 220, 220, 0.95);
 			}
 			.menu {
 				display: table;
@@ -115,11 +123,11 @@
 			.noteHeader {
 				border-radius: 0 10px 0 0;
 				font-size: 80%;
-				background-color: #E4F1FE;
+				background-color: rgba(220, 220, 220, 0.95);
 				color: #000000;
 			}
 			.noteHeaderCompleted {
-				color: #2980b9;
+				color: #3498db;
 				float: right;
 			}
 			.noteHeaderRound {
@@ -128,14 +136,14 @@
 			.noteBody {
 				white-space: pre-wrap;
 				border-radius: 0 0 10px 0;
-				background-color: #ffffff;
+				background-color: rgba(255, 255, 255, 0.9);
 				font-size: 10pt;
 			}
 			.noteBodyRound {
 				border-radius: 0px 0px 10px 10px;
 			}
 			.tag {
-				color: #2980b9;
+				color: #3498db;
 				font-style: italic;
 				cursor: pointer;
 			}
@@ -146,7 +154,7 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 				border-radius: 20px;
-				background-color: #ffffff;
+				background-color: rgba(220, 220, 220, 0.75);
 			}
 			.signHeader, .signLeftTab, .signRightTab, .signBody, .signItem, .signInput, .signSubmit {
 				box-sizing: border-box;
@@ -314,7 +322,6 @@
 							+ ' at '
 							+ getTimeOrDate(notes[i].dateCreated, currentDate)
 							+ '<span class="noteHeaderCompleted">Completed by '
-							+ ', completed by '
 							+ notes[i].userCompleted.username
 							+ ' at '
 							+ getTimeOrDate(notes[i].dateCompleted, currentDate)
