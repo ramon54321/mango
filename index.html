@@ -27,6 +27,10 @@
 					margin: 0 auto;
 				}
 			}
+			#charNumberIndicator {
+				float: right;
+				font-size: 10pt;
+			}
 			.menu, .menuSearchText, .newNote, .noteHeader, .noteBody {
 				box-sizing: border-box;
 			}
@@ -189,6 +193,9 @@
 			.signSubmit:hover {
 				background-color: #2980b9;
 			}
+			textarea {
+				resize: none;
+			}	
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
@@ -220,10 +227,16 @@
 					'<div class="newNote">'
 					+ '<textarea class="newNoteText" rows="10"></textarea>'
 					+ '<a id="commandPost" href="javascript:void(0)">Post</a>'
+					+ '<div id="charNumberIndicator"></div>'
 					+ '</div>'
 					+ '<div id="newNoteFooter" class="footer"></div>');
 				$('#commandPost').click(onPost);
 				$('.newNoteText').focus();
+				$('.newNoteText').bind('input propertychange', function() {
+					$('#charNumberIndicator').html(
+						' ' + this.value.length + ' / 255'
+					);
+				});
 			}
 			function hideNewNote() {
 				$('.newNote, #newNoteFooter').remove();
@@ -236,6 +249,9 @@
 				}
 			}
 			function onPost() {
+				if($('.newNoteText').val().length > 255)
+					return;
+
 				$.post('rest/notes', JSON.stringify({ note: $('.newNoteText').val() }), function() {
 					hideNewNote();
 					hideNotes();
