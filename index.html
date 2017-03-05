@@ -31,6 +31,12 @@
 				float: right;
 				font-size: 10pt;
 			}
+			.failure{
+				color: #e74c3c;
+			}
+			.disabled{
+				color: #95a5a6;
+			}
 			.menu, .menuSearchText, .newNote, .noteHeader, .noteBody {
 				box-sizing: border-box;
 			}
@@ -236,6 +242,23 @@
 					$('#charNumberIndicator').html(
 						' ' + this.value.length + ' / 255'
 					);
+					if(this.value.length > 255){
+						if(!$('#commandPost').hasClass('disabled')){
+							$('#commandPost').addClass('disabled');
+						}
+
+						if(!$('#charNumberIndicator').hasClass('failure')){
+							$('#charNumberIndicator').addClass('failure');
+						}
+					} else {
+						if($('#commandPost').hasClass('disabled')){
+							$('#commandPost').removeClass('disabled');
+						}
+
+						if($('#charNumberIndicator').hasClass('failure')){
+							$('#charNumberIndicator').removeClass('failure');
+						}
+					}
 				});
 			}
 			function hideNewNote() {
