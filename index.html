@@ -5,20 +5,9 @@
 		<title>Mango</title>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 		<style>
-			html {
-				overflow: hidden;
-    			height: 100%;
-			}
 			body {
+				background-color: #e0e0e0;
 				font-family: 'Open Sans', sans-serif;
-				background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./test3.jpg');
-				background-size: cover;
-				background-repeat: no-repeat;
-    			background-attachment: fixed;
-				height: 100%;
-    			overflow: auto;
-				margin: 0px;
-				padding-top: 5px;
 			}
 			a {
 				text-decoration: none;
@@ -44,7 +33,7 @@
 			.menu, .newNote {
 				padding: 10px;
 				border-radius: 10px;
-				background-color: rgba(230, 230, 230, 0.75);
+				background-color: #e4f1fe;
 			}
 			.menu {
 				display: table;
@@ -123,11 +112,9 @@
 			.noteHeader {
 				border-radius: 0 10px 0 0;
 				font-size: 80%;
-				background-color: rgba(230, 230, 230, 0.75);
-				color: #000000;
+				background-color: #e4f1fe;
 			}
 			.noteHeaderCompleted {
-				color: #3498db;
 				float: right;
 			}
 			.noteHeaderRound {
@@ -136,14 +123,14 @@
 			.noteBody {
 				white-space: pre-wrap;
 				border-radius: 0 0 10px 0;
-				background-color: rgba(255, 255, 255, 0.9);
+				background-color: #ffffff;
 				font-size: 10pt;
 			}
 			.noteBodyRound {
 				border-radius: 0px 0px 10px 10px;
 			}
 			.tag {
-				color: #3498db;
+				color: #2980b9;
 				font-style: italic;
 				cursor: pointer;
 			}
@@ -154,7 +141,7 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 				border-radius: 20px;
-				background-color: rgba(230, 230, 230, 0.75);
+				background-color: #ffffff;
 			}
 			.signHeader, .signLeftTab, .signRightTab, .signBody, .signItem, .signInput, .signSubmit {
 				box-sizing: border-box;
@@ -164,7 +151,7 @@
 			}
 			.signHeader, .signLeftTab, .signRightTab {
 				border-radius: 20px 20px 0 0;
-				background-color: #E4F1FE;
+				background-color: #e4f1fe;
 			}
 			.signLeftTab, .signRightTab {
 				display: inline-block;
@@ -209,7 +196,7 @@
 				$('body').append(
 					'<div class="menu">'
 					+ '<div class="menuRow">'
-					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">New</a></div>'
+					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">New note</a></div>'
 					+ '<div class="menuCellLeft"><a id="commandSignOut" href="javascript:void(0)">Sign out</a></div>'
 					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"></div>'
 					+ '<div class="menuCellRight"><a id="commandSearch" href="javascript:void(0)">Search</a></div>'
@@ -328,8 +315,7 @@
 							+ '</span>';
 					} else {
 						header =
-							'Posted by '
-							+ notes[i].user.username
+							notes[i].user.username
 							+ ' at '
 							+ getTimeOrDate(notes[i].dateCreated, currentDate);
 					}
