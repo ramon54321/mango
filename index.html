@@ -69,6 +69,10 @@
 				width: 100%;
 				height: 100%;
 			}
+			.menuNeedReload {
+				color: #e74c3c;
+				transition: 0.25s;
+			}
 			.newNoteText {
 				width: 100%;
 				box-sizing: border-box;
@@ -205,10 +209,13 @@
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
+			var notifiSocket;
+			var notifiSkipNext;
 			function showMenu() {
 				$('body').append(
 					'<div class="menu">'
 					+ '<div class="menuRow">'
+					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)">Reload</a></div>'
 					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">New note</a></div>'
 					+ '<div class="menuCellLeft"><a id="commandSignOut" href="javascript:void(0)">Sign out</a></div>'
 					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"></div>'
@@ -216,6 +223,7 @@
 					+ '</div>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
+				$('#commandReload').click(onReload);
 				$('#commandNew').click(onNew);
 				$('#commandSignOut').click(onSignOut);
 				$('.menuSearchText').keypress(function (event) {
@@ -224,9 +232,25 @@
 					}
 				});
 				$('#commandSearch').click(onSearch);
+				notifiSkipNext = false;
+				notifiSocket = new WebSocket('ws://localhost:8080/mango/websocket');
+				notifiSocket.onmessage = function() {
+					if (notifiSkipNext) {
+						notifiSkipNext = false;
+					} else {
+						$('#commandReload').addClass('menuNeedReload');
+					}
+				}
 			}
 			function hideMenu() {
 				$('.menu, #menuFooter').remove();
+				notifiSocket.close();
+			}
+			function onReload() {
+				$('#commandReload').removeClass('menuNeedReload');
+				hideNewNote();
+				hideNotes();
+				showNotes();
 			}
 			function showNewNote() {
 				$('#menuFooter').after(
@@ -275,7 +299,9 @@
 				if($('.newNoteText').val().length > 255)
 					return;
 
+				notifiSkipNext = true;
 				$.post('rest/notes', JSON.stringify({ note: $('.newNoteText').val() }), function() {
+					$('#commandReload').removeClass('menuNeedReload');
 					hideNewNote();
 					hideNotes();
 					showNotes();
