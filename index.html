@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<title>Mango</title>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<style>
 			body {
 				background-color: #e0e0e0;
@@ -52,27 +53,36 @@
 			}
 			.menu {
 				display: table;
+				padding-top: 5px;
+				padding-bottom: 5px;
 			}
 			.menuRow {
 				display: table-row;
+				height: 28pt;
 			}
 			.menuCellLeft {
 				display: table-cell;
 				white-space: nowrap;
 				padding-right: 20px;
+				padding-left: 20px;
 			}
 			.menuCellCenter {
+				position: relative;
 				display: table-cell;
 				width: 100%;
 				height: 100%;
+				padding-right: 20px;
+				padding-left: 20px;
 			}
 			.menuCellRight {
 				display: table-cell;
-				padding-left: 10px;
+				padding-right: 20px;
+				padding-left: 20px;
 			}
 			.menuSearchText {
 				width: 100%;
 				height: 100%;
+				padding-left: 46px;
 			}
 			.menuNeedReload {
 				color: #e74c3c;
@@ -211,6 +221,11 @@
 			textarea {
 				resize: none;
 			}
+			.magGlass {
+				position: absolute;
+				left: 36px;
+				top: 5px;
+			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
@@ -220,11 +235,10 @@
 				$('body').append(
 					'<div class="menu">'
 					+ '<div class="menuRow">'
-					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)">Reload</a></div>'
-					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">New note</a></div>'
-					+ '<div class="menuCellLeft"><a id="commandSignOut" href="javascript:void(0)">Sign out</a></div>'
-					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"></div>'
-					+ '<div class="menuCellRight"><a id="commandSearch" href="javascript:void(0)">Search</a></div>'
+					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">	<i class="fa fa-plus fa-lg" aria-hidden="true"></i>	</a></div>'
+					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)">	<i class="fa fa-refresh fa-lg" aria-hidden="true"></i>	</a></div>'
+					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"> <div class="magGlass"><a id="commandSearch" href="javascript:void(0)"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></div> </div>'
+					+ '<div class="menuCellRight"><a id="commandSignOut" href="javascript:void(0)">	<i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>	</a></div>'
 					+ '</div>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
