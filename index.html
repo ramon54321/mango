@@ -57,31 +57,34 @@
 			}
 			.menuRow {
 				display: table-row;
-				height: 28pt;
 			}
 			.menuCellLeft {
 				display: table-cell;
-				white-space: nowrap;
+				vertical-align: middle;
 				padding-right: 20px;
-				padding-left: 20px;
+				white-space: nowrap;
 			}
 			.menuCellCenter {
-				position: relative;
 				display: table-cell;
 				width: 100%;
-				height: 100%;
-				padding-right: 20px;
-				padding-left: 20px;
+				position: relative;
+			}
+			.menuCellCenter2 {
+				display: table-cell;
+				vertical-align: middle;
+				padding-left: 3px;
 			}
 			.menuCellRight {
 				display: table-cell;
-				padding-right: 20px;
+				vertical-align: middle;
 				padding-left: 20px;
 			}
 			.menuSearchText {
 				width: 100%;
-				height: 100%;
-				padding-left: 46px;
+				display: block;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
 			}
 			.menuNeedReload {
 				color: #e74c3c;
@@ -218,16 +221,6 @@
 			textarea {
 				resize: none;
 			}
-			.magGlass {
-				position: absolute;
-				opacity: 0.3;
-				left: 36px;
-				top: 5px;
-				transition: 0.5s;
-			}
-			.magGlass:hover {
-				opacity: 1.0;
-			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
@@ -237,10 +230,11 @@
 				$('body').append(
 					'<div class="menu">'
 					+ '<div class="menuRow">'
-					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">	<i class="fa fa-plus fa-lg" aria-hidden="true"></i>	</a></div>'
-					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)">	<i class="fa fa-refresh fa-lg" aria-hidden="true"></i>	</a></div>'
-					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"> <div class="magGlass"><a id="commandSearch" href="javascript:void(0)"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></div> </div>'
-					+ '<div class="menuCellRight"><a id="commandSignOut" href="javascript:void(0)">	<i style="font-size: 1.5em;" class="fa fa-sign-out fa-lg" aria-hidden="true"></i>	</a></div>'
+					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)"><i class="fa fa-plus" style="font-size: 1.5em;"></i></a></div>'
+					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)"><i class="fa fa-refresh" style="font-size: 1.3em;"></i></a></div>'
+					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"></div>'
+					+ '<div class="menuCellCenter2"><a id="commandSearch" href="javascript:void(0)"><i class="fa fa-search" style="font-size: 1.2em;"></i></a></div>'
+					+ '<div class="menuCellRight"><a id="commandSignOut" href="javascript:void(0)"><i class="fa fa-sign-out" style="font-size: 1.6em;"></i></a></div>'
 					+ '</div>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
