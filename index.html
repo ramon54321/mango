@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Mango</title>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<style>
 			body {
@@ -18,6 +18,9 @@
 			a:hover {
 				color: #3498db;
 			}
+			textarea {
+				resize: none;
+			}
 			.footer {
 				height: 10px;
 			}
@@ -31,16 +34,6 @@
 					width: 700px;
 					margin: 0 auto;
 				}
-			}
-			#charNumberIndicator {
-				float: right;
-				font-size: 10pt;
-			}
-			.failure{
-				color: #e74c3c;
-			}
-			.disabled{
-				color: #95a5a6;
 			}
 			.menu, .menuSearchText, .newNote, .noteHeader, .noteBody {
 				box-sizing: border-box;
@@ -93,6 +86,18 @@
 			.newNoteText {
 				width: 100%;
 				box-sizing: border-box;
+			}
+			.newNoteCounter {
+				float: right;
+				font-size: 10pt;
+			}
+			.newNoteFailure {
+				color: #e74c3c;
+			}
+			.newNoteDisabled {
+				pointer-events: none;
+				cursor: default;
+				color: #95a5a6;
 			}
 			.note {
 				display: table;
@@ -218,9 +223,6 @@
 			.signSubmit:hover {
 				background-color: #2980b9;
 			}
-			textarea {
-				resize: none;
-			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 		<script>
@@ -272,31 +274,22 @@
 					'<div class="newNote">'
 					+ '<textarea class="newNoteText" rows="10"></textarea>'
 					+ '<a id="commandPost" href="javascript:void(0)">Post</a>'
-					+ '<div id="charNumberIndicator"></div>'
+					+ '<div class="newNoteCounter"></div>'
 					+ '</div>'
 					+ '<div id="newNoteFooter" class="footer"></div>');
 				$('#commandPost').click(onPost);
 				$('.newNoteText').focus();
 				$('.newNoteText').bind('input propertychange', function() {
-					$('#charNumberIndicator').html(
-						' ' + this.value.length + ' / 255'
-					);
-					if(this.value.length > 255){
-						if(!$('#commandPost').hasClass('disabled')){
-							$('#commandPost').addClass('disabled');
-						}
-
-						if(!$('#charNumberIndicator').hasClass('failure')){
-							$('#charNumberIndicator').addClass('failure');
-						}
+					$('.newNoteCounter').html(
+						' '
+						+ this.value.length
+						+ ' / 255');
+					if (this.value.length > 255) {
+						$('#commandPost').addClass('newNoteDisabled');
+						$('.newNoteCounter').addClass('newNoteFailure');
 					} else {
-						if($('#commandPost').hasClass('disabled')){
-							$('#commandPost').removeClass('disabled');
-						}
-
-						if($('#charNumberIndicator').hasClass('failure')){
-							$('#charNumberIndicator').removeClass('failure');
-						}
+						$('#commandPost').removeClass('newNoteDisabled');
+						$('.newNoteCounter').removeClass('newNoteFailure');
 					}
 				});
 			}
