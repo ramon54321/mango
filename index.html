@@ -220,8 +220,13 @@
 			}
 			.magGlass {
 				position: absolute;
+				opacity: 0.3;
 				left: 36px;
 				top: 5px;
+				transition: 0.5s;
+			}
+			.magGlass:hover {
+				opacity: 1.0;
 			}
 		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
@@ -235,7 +240,7 @@
 					+ '<div class="menuCellLeft"><a id="commandNew" href="javascript:void(0)">	<i class="fa fa-plus fa-lg" aria-hidden="true"></i>	</a></div>'
 					+ '<div class="menuCellLeft"><a id="commandReload" href="javascript:void(0)">	<i class="fa fa-refresh fa-lg" aria-hidden="true"></i>	</a></div>'
 					+ '<div class="menuCellCenter"><input class="menuSearchText" type="text"> <div class="magGlass"><a id="commandSearch" href="javascript:void(0)"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></div> </div>'
-					+ '<div class="menuCellRight"><a id="commandSignOut" href="javascript:void(0)">	<i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>	</a></div>'
+					+ '<div class="menuCellRight"><a id="commandSignOut" href="javascript:void(0)">	<i style="font-size: 1.5em;" class="fa fa-sign-out fa-lg" aria-hidden="true"></i>	</a></div>'
 					+ '</div>'
 					+ '</div>'
 					+ '<div id="menuFooter" class="footer"></div>');
