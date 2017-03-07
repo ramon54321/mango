@@ -4,26 +4,20 @@
 		<meta charset="UTF-8">
 		<title>Echo</title>
 		<script>
-    
-      var wsUri = "ws://localhost:8080/mango/websocket";
-      var socket = new WebSocket(wsUri);
-
-			function init(){
-        socket.onopen = function(){
-          console.log("Connection Opened!");
-        }
-
-        socket.onclose = function(){
-          console.log("Connection Closed!");
-        }
-
-        socket.onmessage = function(message){
-          console.log("Message REC: " + message.data);
-        }
-      }
-
-      init();
-
+			var wsUri = "ws://localhost:8080/mango/websocket";
+			var socket = new WebSocket(wsUri);
+			function init() {
+				socket.onopen = function() {
+					console.log("Connection Opened!");
+				}
+				socket.onclose = function() {
+					console.log("Connection Closed!");
+				}
+				socket.onmessage = function(message) {
+					console.log("Message REC: " + message.data);
+				}
+			}
+			init();
 		</script>
 	</head>
 	<body>
