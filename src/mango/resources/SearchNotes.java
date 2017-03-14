@@ -3,38 +3,30 @@ package mango.resources;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import mango.dto.*;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.ArrayList;
 import org.hibernate.Query;
 import mango.utilities.*;
 import javax.ws.rs.core.*;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import mango.websockets.*;
 
 @Path("searchnotes/")
 public class SearchNotes {
 
-  /***
-	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering.
-   * returns: a list of all notes which matches the search criteria.
+	/**
+	 * *
+	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering. returns: a list of all notes which matches the search criteria.
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-  @Path("{search}")
-	public Response notesGet(@PathParam("search") String searchHex, @Context HttpServletRequest request){
+	@Path("{search}")
+	public Response notesGet(@PathParam("search") String searchHex, @Context HttpServletRequest request) {
+		String search = searchHex;
 
-    String search = searchHex;
+		System.out.println("String search : " + search);
 
-    System.out.println("String search : " + search);
-
-		if(DataServices.getSignedInUserId(request) == -1){
+		if (DataServices.getSignedInUserId(request) == -1) {
 			return null;
 		}
 
@@ -49,8 +41,8 @@ public class SearchNotes {
 
 			String[] searchParts = search.split("\\+");
 			String searchQuery = "";
-			for(int i = 0; i < searchParts.length; i++){
-				if(i > 0){
+			for (int i = 0; i < searchParts.length; i++) {
+				if (i > 0) {
 					searchQuery += " and";
 				}
 				searchQuery += " note like '%" + searchParts[i] + "%'";
@@ -77,19 +69,20 @@ public class SearchNotes {
 			results.addAll((List<Note>) query.list());
 
 			int orderNumber = 0;
-			for(Note n : results){
+			for (Note n : results) {
 				n.sortOrder = orderNumber;
 				orderNumber++;
 			}
 
-			list = new GenericEntity<List<Note>>(results){};
+			list = new GenericEntity<List<Note>>(results) {
+			};
 
 			session.getTransaction().commit();
 			session.close();
 
 			return Response.ok(list).build();
 
-		} catch (Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}

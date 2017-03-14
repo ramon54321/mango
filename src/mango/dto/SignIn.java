@@ -5,31 +5,33 @@ import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 public class SignIn {
-  private String username;
-  private String password;
 
-  public SignIn(){}
+	private String username;
+	private String password;
 
-  public SignIn(String username, String password){
-    this.username = username;
-    this.password = password;
-  }
+	public SignIn() {
+	}
 
-  @XmlElement
-  public String getUsername(){
-    return this.username;
-  }
+	public SignIn(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
 
-  public void setUsername(String username){
-    this.username = username;
-  }
+	@XmlElement
+	public String getUsername() {
+		return this.username;
+	}
 
-  @XmlElement
-  public String getPassword(){
-    return this.password;
-  }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-  public void setPassword(String password){
-    this.password = password;
-  }
+	@XmlElement
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

@@ -1,49 +1,38 @@
 package mango.utilities;
 
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import java.sql.*;
 import mango.dto.*;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import java.security.MessageDigest;
 import java.util.List;
 import org.hibernate.Query;
 import mango.utilities.*;
-import java.nio.charset.Charset;
 import java.nio.ByteBuffer;
 
 public class DataServices {
 
-  public static String decode(String hex){
+	public static String decode(String hex) {
+		String[] list = hex.split("(?<=\\G.{2})");
+		ByteBuffer buffer = ByteBuffer.allocate(list.length);
 
-    String[] list=hex.split("(?<=\\G.{2})");
-    ByteBuffer buffer= ByteBuffer.allocate(list.length);
+		System.out.println(list.length);
 
-    System.out.println(list.length);
+		for (String str : list) {
+			buffer.put(Byte.parseByte(str, 16));
+		}
 
-    for(String str: list){
-      buffer.put(Byte.parseByte(str,16));
-    }
+		String text = null;
+		try {
+			text = new String(buffer.array(), "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    String text = null;
-    try{
-      text = new String(buffer.array(), "UTF-8");
-    } catch (Exception e){
-      e.printStackTrace();
-    }
+		return text;
+	}
 
-    return text;
-  }
-
-  public static UserSession validateCredentials(String username, String password) {
-
+	public static UserSession validateCredentials(String username, String password) {
 		// Open session and get user from database given username
 		Session session = Hibernate.getSessionFactory().openSession();
 		session.beginTransaction();
@@ -58,8 +47,9 @@ public class DataServices {
 		session.close();
 
 		// Ensure a user was found
-		if(results.size() < 1)
+		if (results.size() < 1) {
 			return new UserSession(false, null);
+		}
 
 		User retrievedUser = (User) results.get(0);
 		String expectedPassword = retrievedUser.getPassword();
@@ -69,14 +59,14 @@ public class DataServices {
 		System.out.println("Expected: " + expectedPassword);
 
 		// Compare passwords
-		if(givenPassword.equals(expectedPassword)){
+		if (givenPassword.equals(expectedPassword)) {
 			return new UserSession(true, retrievedUser);
 		} else {
 			return new UserSession(false, null);
 		}
 	}
 
-  public static String getHash(String pure){
+	public static String getHash(String pure) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(pure.getBytes());
@@ -96,36 +86,34 @@ public class DataServices {
 		}
 	}
 
-  public static int getSignedInUserId(HttpServletRequest request){
-    HttpSession httpSession = request.getSession();
+	public static int getSignedInUserId(HttpServletRequest request) {
+		HttpSession httpSession = request.getSession();
 		Object userId = httpSession.getAttribute("userid");
 
-		if(userId == null){
+		if (userId == null) {
 			return -1;
 		} else {
 			return (int) userId;
 		}
-  }
+	}
 
-  public static User getSignedInUser(HttpServletRequest request){
+	public static User getSignedInUser(HttpServletRequest request) {
+		int userId = getSignedInUserId(request);
 
-    int userId = getSignedInUserId(request);
+		Session session = Hibernate.getSessionFactory().openSession();
+		session.beginTransaction();
 
-    Session session = Hibernate.getSessionFactory().openSession();
-    session.beginTransaction();
+		String hql = "FROM User WHERE userId = :id";
+		Query query = session.createQuery(hql);
+		query.setParameter("id", userId);
+		List results = query.list();
 
-    String hql = "FROM User WHERE userId = :id";
-    Query query = session.createQuery(hql);
-    query.setParameter("id", userId);
-    List results = query.list();
+		System.out.println("List length: " + results.size());
+		session.getTransaction().commit();
+		session.close();
 
-    System.out.println("List length: " + results.size());
-    session.getTransaction().commit();
-    session.close();
+		User retrievedUser = (User) results.get(0);
 
-    User retrievedUser = (User) results.get(0);
-
-    return retrievedUser;
-  }
-
+		return retrievedUser;
+	}
 }

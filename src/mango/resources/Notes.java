@@ -3,33 +3,26 @@ package mango.resources;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import mango.dto.*;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.ArrayList;
 import org.hibernate.Query;
 import mango.utilities.*;
 import javax.ws.rs.core.*;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import mango.websockets.*;
 
 @Path("notes/")
 public class Notes {
 
-	/***
-	 * Gets the note with the specified id.
-   * returns: the note.
+	/**
+	 * *
+	 * Gets the note with the specified id. returns: the note.
 	 */
-  @GET
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Note notesId(@PathParam("id") String idin){
-
+	public Note notesId(@PathParam("id") String idin) {
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
 
@@ -50,22 +43,21 @@ public class Notes {
 
 			return retrievedNote;
 
-		} catch (Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
-  /***
-	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering.
-   * returns: a list of all notes which matches the search criteria.
+	/**
+	 * *
+	 * If the passed json search variable contains a string, it will be used to filter notes that contain said string. Else all notes will be returned in High to Low priority, with date sub ordering. returns: a list of all notes which matches the search criteria.
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response notesGet(@QueryParam("search") String search, @Context HttpServletRequest request){
+	public Response notesGet(@QueryParam("search") String search, @Context HttpServletRequest request) {
+		System.out.println("String search : " + search);
 
-    System.out.println("String search : " + search);
-
-		if(DataServices.getSignedInUserId(request) == -1){
+		if (DataServices.getSignedInUserId(request) == -1) {
 			return null;
 		}
 
@@ -78,12 +70,13 @@ public class Notes {
 			List<Note> results = new ArrayList();
 			GenericEntity<List<Note>> list = null;
 
-			if(search != null){
+			if (search != null) {
 				hql = "FROM Note WHERE note like '%" + search + "%'";
-        query = session.createQuery(hql);
+				query = session.createQuery(hql);
 				results.addAll((List<Note>) query.list());
 
-				list = new GenericEntity<List<Note>>(results){};
+				list = new GenericEntity<List<Note>>(results) {
+				};
 			} else {
 				hql = "FROM Note WHERE note like '%#highpriority%' and completed = false order by dateCreated desc";
 				query = session.createQuery(hql);
@@ -101,13 +94,14 @@ public class Notes {
 				query = session.createQuery(hql);
 				results.addAll((List<Note>) query.list());
 
-        int orderNumber = 0;
-        for(Note n : results){
-          n.sortOrder = orderNumber;
-          orderNumber++;
-        }
+				int orderNumber = 0;
+				for (Note n : results) {
+					n.sortOrder = orderNumber;
+					orderNumber++;
+				}
 
-				list = new GenericEntity<List<Note>>(results){};
+				list = new GenericEntity<List<Note>>(results) {
+				};
 			}
 
 			session.getTransaction().commit();
@@ -115,21 +109,20 @@ public class Notes {
 
 			return Response.ok(list).build();
 
-		} catch (Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
-  /***
-	 * Adds the passed note to the database, with the currently signed in user and the current date.
-   * returns: a status of the add.
+	/**
+	 * *
+	 * Adds the passed note to the database, with the currently signed in user and the current date. returns: a status of the add.
 	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Status notesPost(Note note, @Context HttpServletRequest request){
-
-		if(DataServices.getSignedInUserId(request) == -1){
+	public Status notesPost(Note note, @Context HttpServletRequest request) {
+		if (DataServices.getSignedInUserId(request) == -1) {
 			return new Status(false, "No signed in user");
 		}
 
@@ -142,24 +135,26 @@ public class Notes {
 			session.save(note);
 			session.getTransaction().commit();
 			session.close();
-		} catch (Exception e) { e.printStackTrace(); return new Status(false, "Failed to save to database"); }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Status(false, "Failed to save to database");
+		}
 
-		WebLog.log("New note created by Username: " + note.getUser().getUsername() + " - Titled: "  + note.getTitle() + " - IP: " + request.getRemoteAddr());
+		WebLog.log("New note created by Username: " + note.getUser().getUsername() + " - Titled: " + note.getTitle() + " - IP: " + request.getRemoteAddr());
 
-    WebsocketEndpoint.broadcast();
+		WebsocketEndpoint.broadcast();
 
 		return new Status(true, "Note created");
 	}
 
-  /***
-	 * Sets the specified note to completed.
-   * returns: the updated note.
+	/**
+	 * *
+	 * Sets the specified note to completed. returns: the updated note.
 	 */
-  @PUT
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("complete/{id}")
-	public Note notesComplete(@PathParam("id") String idin, @Context HttpServletRequest request){
-
+	public Note notesComplete(@PathParam("id") String idin, @Context HttpServletRequest request) {
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
 
@@ -183,24 +178,23 @@ public class Notes {
 			session.getTransaction().commit();
 			session.close();
 
-      WebsocketEndpoint.broadcast();
+			WebsocketEndpoint.broadcast();
 
 			return retrievedNote;
 
-		} catch (Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
-  /***
-	 * Sets the specified note to uncompleted.
-   * returns: the updated note.
+	/**
+	 * *
+	 * Sets the specified note to uncompleted. returns: the updated note.
 	 */
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("uncomplete/{id}")
-	public Note notesUncomplete(@PathParam("id") String idin){
-
+	public Note notesUncomplete(@PathParam("id") String idin) {
 		try {
 			int id = Integer.valueOf(String.valueOf(idin));
 
@@ -222,11 +216,11 @@ public class Notes {
 			session.getTransaction().commit();
 			session.close();
 
-      WebsocketEndpoint.broadcast();
+			WebsocketEndpoint.broadcast();
 
 			return retrievedNote;
 
-		} catch (Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}

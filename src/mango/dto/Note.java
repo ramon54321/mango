@@ -26,11 +26,11 @@ public class Note {
 	@Transient
 	public int sortOrder;
 
-	public Note(){
+	public Note() {
 
 	}
 
-	public Note(User user, String title, String note, boolean completed, boolean isTask, boolean pinned){
+	public Note(User user, String title, String note, boolean completed, boolean isTask, boolean pinned) {
 		this.user = user;
 		this.title = title;
 		this.note = note;
@@ -39,101 +39,101 @@ public class Note {
 		this.pinned = pinned;
 	}
 
-	public void setUserCompleted(User userCompleted){
+	public void setUserCompleted(User userCompleted) {
 		this.userCompleted = userCompleted;
 	}
 
 	@XmlElement
-	public User getUserCompleted(){
+	public User getUserCompleted() {
 		return this.userCompleted;
 	}
 
-	public void setDateCompleted(Date dateCompleted){
+	public void setDateCompleted(Date dateCompleted) {
 		this.dateCompleted = dateCompleted;
 	}
 
-	public void setDateCompletedCurrent(){
+	public void setDateCompletedCurrent() {
 		this.dateCompleted = new Date();
 	}
 
 	@XmlElement
-	public Date getDateCompleted(){
+	public Date getDateCompleted() {
 		return this.dateCompleted;
 	}
 
-	public void setDateCreated(Date dateCreated){
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public void setDateCurrent(){
+	public void setDateCurrent() {
 		this.dateCreated = new Date();
 	}
 
 	@XmlElement
-	public Date getDateCreated(){
+	public Date getDateCreated() {
 		return this.dateCreated;
 	}
 
-	public void setCompleted(boolean completed){
+	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}
 
 	@XmlElement
-	public boolean getCompleted(){
+	public boolean getCompleted() {
 		return this.completed;
 	}
 
-	public void setPinned(boolean pinned){
+	public void setPinned(boolean pinned) {
 		this.pinned = pinned;
 	}
 
 	@XmlElement
-	public boolean getPinned(){
+	public boolean getPinned() {
 		return this.pinned;
 	}
 
-	public void setIsTask(boolean isTask){
+	public void setIsTask(boolean isTask) {
 		this.isTask = isTask;
 	}
 
 	@XmlElement
-	public boolean getIsTask(){
+	public boolean getIsTask() {
 		return this.isTask;
 	}
 
-	public void setNoteId(int noteId){
+	public void setNoteId(int noteId) {
 		this.noteId = noteId;
 	}
 
 	@XmlElement
-	public int getNoteId(){
+	public int getNoteId() {
 		return this.noteId;
 	}
 
-	public void setUser(User user){
+	public void setUser(User user) {
 		this.user = user;
 	}
 
 	@XmlElement
-	public User getUser(){
+	public User getUser() {
 		return this.user;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	@XmlElement
-	public String getTitle(){
+	public String getTitle() {
 		return this.title;
 	}
 
-	public void setNote(String note){
+	public void setNote(String note) {
 		this.note = note;
 	}
 
 	@XmlElement
-	public String getNote(){
+	public String getNote() {
 		return this.note;
 	}
 }

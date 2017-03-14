@@ -5,31 +5,33 @@ import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 public class Status {
-  private boolean status;
-  private String message;
 
-  public Status(){}
+	private boolean status;
+	private String message;
 
-  public Status(boolean status, String message){
-    this.status = status;
-    this.message = message;
-  }
+	public Status() {
+	}
 
-  @XmlElement
-  public boolean getStatus(){
-    return this.status;
-  }
+	public Status(boolean status, String message) {
+		this.status = status;
+		this.message = message;
+	}
 
-  public void setStatus(boolean status){
-    this.status = status;
-  }
+	@XmlElement
+	public boolean getStatus() {
+		return this.status;
+	}
 
-  @XmlElement
-  public String getMessage(){
-    return this.message;
-  }
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
-  public void setMessage(String message){
-    this.message = message;
-  }
+	@XmlElement
+	public String getMessage() {
+		return this.message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

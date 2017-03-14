@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement
 public class Search {
 
-  @XmlElement
-  public String search;
-
+	@XmlElement
+	public String search;
 }
