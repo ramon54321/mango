@@ -1,0 +1,217 @@
+body {
+	background-color: #e0e0e0;
+	font-family: 'Open Sans', sans-serif;
+}
+a {
+	text-decoration: none;
+	color: #2980b9;
+	transition: 0.5s;
+}
+a:hover {
+	color: #3498db;
+}
+textarea {
+	resize: none;
+}
+.footer {
+	height: 10px;
+}
+@media all and (max-width: 750px) {
+	.menu, .newNote, .note {
+		width: 100%;
+	}
+}
+@media all and (min-width: 751px) {
+	.menu, .newNote, .note {
+		width: 700px;
+		margin: 0 auto;
+	}
+}
+.menu, .menuSearchText, .newNote, .noteHeader, .noteBody {
+	box-sizing: border-box;
+}
+.menu, .newNote {
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #e4f1fe;
+}
+.menu {
+	display: table;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.menuRow {
+	display: table-row;
+}
+.menuCellLeft {
+	display: table-cell;
+	vertical-align: middle;
+	padding-right: 20px;
+	white-space: nowrap;
+}
+.menuCellCenter {
+	display: table-cell;
+	width: 100%;
+	position: relative;
+}
+.menuCellCenter2 {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 3px;
+}
+.menuCellRight {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 20px;
+}
+.menuSearchText {
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.menuNeedReload {
+	color: #e74c3c;
+	transition: 0.25s;
+}
+.newNoteText {
+	width: 100%;
+	box-sizing: border-box;
+}
+.newNoteCounter {
+	float: right;
+	font-size: 10pt;
+}
+.newNoteFailure {
+	color: #e74c3c;
+}
+.newNoteDisabled {
+	pointer-events: none;
+	cursor: default;
+	color: #95a5a6;
+}
+.note {
+	display: table;
+	position: relative;
+}
+.noteRow {
+	display: table-row;
+}
+.noteStripe, .noteEmpty, .noteHeader, .noteBody {
+	display: table-cell;
+}
+.noteStripe {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 25px;
+	border-radius: 10px 0 0 10px;
+}
+.noteRed, .noteBlue, .noteGreen {
+	cursor: pointer;
+	transition: 0.5s;
+}
+.noteRed {
+	background-color: #e74c3c;
+}
+.noteRed:hover {
+	background-color: #c0392b;
+}
+.noteBlue {
+	background-color: #3498db;
+}
+.noteBlue:hover {
+	background-color: #2980b9;
+}
+.noteGreen {
+	background-color: #00d070;
+}
+.noteGreen:hover {
+	background-color: #27ae60;
+}
+.noteEmpty {
+	width: 25px;
+}
+.noteHeader, .noteBody {
+	padding: 8px 10px 8px 10px;
+}
+.noteHeader {
+	border-radius: 0 10px 0 0;
+	font-size: 80%;
+	background-color: #e4f1fe;
+}
+.noteHeaderCompleted {
+	float: right;
+}
+.noteHeaderRound {
+	border-radius: 10px 10px 0 0;
+}
+.noteBody {
+	white-space: pre-wrap;
+	border-radius: 0 0 10px 0;
+	background-color: #ffffff;
+	font-size: 10pt;
+}
+.noteBodyRound {
+	border-radius: 0px 0px 10px 10px;
+}
+.tag {
+	color: #2980b9;
+	font-style: italic;
+	cursor: pointer;
+}
+.sign {
+	width: 250px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+	background-color: #ffffff;
+}
+.signHeader, .signLeftTab, .signRightTab, .signBody, .signItem, .signInput, .signSubmit {
+	box-sizing: border-box;
+}
+.signHeader, .signItem, .signInput, .signSubmit {
+	width: 100%;
+}
+.signHeader, .signLeftTab, .signRightTab {
+	border-radius: 20px 20px 0 0;
+	background-color: #e4f1fe;
+}
+.signLeftTab, .signRightTab {
+	display: inline-block;
+	width: 50%;
+	padding: 10px;
+	text-align: center;
+}
+.signRightTab {
+	float: right;
+}
+.signBody {
+	padding: 15px;
+}
+.signItem, .signSuccess, .signFailure, .signLoading {
+	padding: 10px;
+}
+.signFailure {
+	color: #e74c3c;
+}
+.signLoading {
+	color: #3498db;
+}
+.signSubmit {
+	display: inline-block;
+	padding: 6px;
+	padding-left: 12px;
+	padding-right: 12px;
+	border-radius: 5px;
+	background-color: #3498db;
+	color: #ffffff;
+	transition: 0.5s;
+	text-align: center;
+}
+.signSubmit:hover {
+	background-color: #2980b9;
+}
