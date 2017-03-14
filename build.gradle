@@ -6,9 +6,10 @@ sourceSets {
 }
 
 dependencies {
+	compile fileTree(include: ['*.jar'], dir: 'lib')
+	compile fileTree(include: ['*.jar'], dir: 'WEB-INF/lib')
 	compile fileTree(include: ['*.jar'], dir: '../lib')
 	compile fileTree(include: ['*.jar'], dir: '../../Program Files/glassfish-4.1.1/glassfish/lib')
-	compile fileTree(include: ['*.jar'], dir: './WEB-INF/lib')
 	testCompile 'junit:junit:4.12'
 }
 
